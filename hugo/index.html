@@ -28,8 +28,8 @@
       margin:0;
       color:var(--ink);
       background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.08), transparent 30%),
-        linear-gradient(#121212, #242424 55%, #6b6b6b 100%);
+        radial-gradient(circle at 20% 20%, rgba(116,123,84,.06), transparent 30%),
+        linear-gradient(#f4f0e7, #ebe5d9 58%, #ddd5c8 100%);
       font-family:"Montserrat",system-ui,-apple-system,sans-serif;
       overflow-x:hidden;
     }
@@ -53,8 +53,8 @@
       place-items:center;
       overflow:hidden;
       background:
-        radial-gradient(circle at 50% 25%, rgba(255,255,255,.12), transparent 30%),
-        linear-gradient(155deg,#111,#191919 58%,#353535);
+        radial-gradient(circle at 50% 25%, rgba(255,255,255,.95), transparent 34%),
+        linear-gradient(155deg,#f7f3eb,#eee8dc 58%,#ded6c8);
     }
 
     .opening-stage:before{
@@ -74,7 +74,7 @@
       top:7vh;
       width:min(92vw,560px);
       text-align:center;
-      color:#e9e7df;
+      color:#67634f;
       letter-spacing:.11em;
       font-size:11px;
       text-transform:uppercase;
@@ -96,6 +96,11 @@
       inset:0;
       background:linear-gradient(140deg,#79805a,#666d4b);
       border-radius:6px;
+      overflow:hidden;
+    }
+
+    /* Solo permitimos que la tarjeta sobresalga cuando el usuario ya empezó a abrir el sobre */
+    .envelope.is-open{
       overflow:visible;
     }
 
@@ -124,16 +129,16 @@
     .envelope-front{
       position:absolute;
       inset:auto 0 0 0;
-      height:76%;
+      height:80%;
       background:linear-gradient(170deg,#7f8660,#707751);
       clip-path:polygon(0 25%,50% 75%,100% 25%,100% 100%,0 100%);
-      z-index:4;
+      z-index:6;
       border-radius:0 0 6px 6px;
     }
 
     .flap{
       position:absolute;
-      z-index:5;
+      z-index:7;
       left:0;
       top:0;
       width:100%;
@@ -148,11 +153,11 @@
 
     .seal{
       position:absolute;
-      top:48%;
+      top:43%;
       left:50%;
       transform:translate(-50%,-50%);
-      width:64px;
-      height:64px;
+      width:54px;
+      height:54px;
       border-radius:50%;
       display:grid;
       place-items:center;
@@ -161,7 +166,7 @@
       font-family:"Cormorant Garamond",serif;
       font-style:italic;
       letter-spacing:.08em;
-      z-index:8;
+      z-index:9;
       background:rgba(98,105,70,.8);
       box-shadow:0 5px 18px rgba(0,0,0,.2);
       transition:opacity .2s ease, transform .2s ease;
@@ -183,7 +188,7 @@
       padding:42px 28px;
       text-align:center;
       box-shadow:0 12px 36px rgba(0,0,0,.16);
-      transform:translateY(28%);
+      transform:translateY(88%);
       transition:transform .08s linear;
       overflow:hidden;
     }
@@ -243,11 +248,60 @@
       letter-spacing:.18em;
     }
 
+    .closed-preview{
+      position:absolute;
+      inset:0;
+      z-index:3;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding-top:0;
+      pointer-events:none;
+      transition:opacity .15s linear, transform .15s linear;
+    }
+    .closed-monogram{
+      font-family:"Cormorant Garamond",serif;
+      font-size:34px;
+      font-style:italic;
+      letter-spacing:.16em;
+      color:#666d4b;
+      margin-bottom:18px;
+    }
+    .closed-guest{
+      font-family:"Cormorant Garamond",serif;
+      font-size:clamp(24px,6vw,34px);
+      font-style:italic;
+      color:#4a4840;
+      border-bottom:1px solid #b8b09f;
+      padding:0 12px 4px;
+    }
+    .opened-content{
+      position:relative;
+      z-index:2;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .16s linear, transform .16s linear;
+    }
+    .inner-card.is-opening .closed-preview{
+      opacity:0;
+      transform:translateY(-10px);
+    }
+    .inner-card.is-opening .opened-content{
+      opacity:1;
+      transform:translateY(0);
+    }
+
     .scroll-hint{
       position:absolute;
       bottom:6vh;
       z-index:8;
-      color:#eeeae1;
+      color:#6e7058;
       text-align:center;
       font-size:10px;
       letter-spacing:.16em;
@@ -259,7 +313,7 @@
       width:1px;
       height:32px;
       margin:12px auto 0;
-      background:linear-gradient(#fff,transparent);
+      background:linear-gradient(#747b54,transparent);
       animation:hint 1.6s ease-in-out infinite;
     }
     @keyframes hint{
@@ -722,18 +776,24 @@
       <div class="intro-title">Desliza hacia abajo para abrir tu invitación</div>
 
       <div class="envelope-wrap" aria-label="Sobre de invitación">
-        <div class="envelope">
+        <div class="envelope" id="envelope">
           <div class="inner-card" id="innerCard">
-            <div class="monogram">Nuestra boda</div>
-            <div class="names">
-              <span>Roberto</span>
-              <span class="amp">&</span>
-              <span>Cecilia</span>
+            <div class="closed-preview" id="closedPreview">
+              <div class="closed-monogram">R &amp; C</div>
             </div>
-            <div class="guest-label">Tenemos el gusto de invitar a</div>
-            <div class="guest-name js-guest">Hugo Capellini</div>
-            <div class="guest-label" style="margin-top:12px">Contemplado con 1 acompañante</div>
-            <div class="date-cover">14 · 11 · 2026</div>
+
+            <div class="opened-content" id="openedContent">
+              <div class="monogram">Nuestra boda</div>
+              <div class="names">
+                <span>Roberto</span>
+                <span class="amp">&amp;</span>
+                <span>Cecilia</span>
+              </div>
+              <div class="guest-label">Tenemos el gusto de invitar a</div>
+              <div class="guest-name js-guest">Hugo Capellini</div>
+              <div class="guest-label companion-line" style="margin-top:12px">Contemplado con 1 acompañante</div>
+              <div class="date-cover">14 · 11 · 2026</div>
+            </div>
           </div>
 
           <div class="flap" id="flap"></div>
@@ -914,6 +974,7 @@
     // Animación del sobre controlada por el scroll
     const opening = document.querySelector(".opening");
     const flap = document.getElementById("flap");
+    const envelope = document.getElementById("envelope");
     const card = document.getElementById("innerCard");
     const seal = document.getElementById("seal");
     const intro = document.querySelector(".intro-title");
@@ -925,13 +986,19 @@
       const total = opening.offsetHeight - innerHeight;
       const progress = clamp(-rect.top / Math.max(total,1),0,1);
 
+      // Mientras está totalmente cerrado solo mostramos R&C y el nombre del invitado.
+      // El resto de la información aparece apenas comienza la apertura.
+      card.classList.toggle("is-opening", progress > 0.16);
+      envelope.classList.toggle("is-open", progress > 0.20);
+
       // 0-45%: se levanta la solapa
       const flapProgress = clamp(progress / .45, 0, 1);
       flap.style.transform = `rotateX(${-165 * flapProgress}deg)`;
 
-      // 25-100%: sale la tarjeta
-      const cardProgress = clamp((progress - .22) / .78, 0, 1);
-      card.style.transform = `translateY(${28 - cardProgress * 90}%)`;
+      // La tarjeta permanece completamente dentro del sobre al inicio.
+      // Después de abrirse la solapa comienza a salir hacia arriba.
+      const cardProgress = clamp((progress - .20) / .80, 0, 1);
+      card.style.transform = `translateY(${88 - cardProgress * 148}%)`;
 
       seal.style.opacity = String(1 - clamp(progress / .18,0,1));
       seal.style.transform = `translate(-50%,-50%) scale(${1 - clamp(progress/.2,0,1)*.25})`;
@@ -970,3 +1037,35 @@
   </script>
 </body>
 </html>
+
+<style>
+  /* Ajuste final de portada cerrada */
+  .closed-preview{
+    opacity:0 !important;
+    pointer-events:none;
+  }
+
+  .seal{
+    top:50%;
+    width:72px;
+    height:72px;
+    font-size:18px;
+    letter-spacing:.10em;
+    background:rgba(94,101,67,.96);
+    border:1px solid rgba(255,255,255,.72);
+    box-shadow:0 8px 22px rgba(0,0,0,.18);
+  }
+
+  /* La hoja queda completamente escondida dentro del sobre antes del scroll */
+  .inner-card{
+    bottom:8%;
+  }
+
+  @media (max-width:560px){
+    .seal{
+      width:64px;
+      height:64px;
+      font-size:16px;
+    }
+  }
+</style>
