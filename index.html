@@ -821,7 +821,7 @@
     </section>
 
     <section class="section paper" style="padding-top:26px">
-      <img class="photo couple-photo" alt="Pareja" src="/images/pareja.png?v=2">
+      <img class="photo couple-photo" alt="Pareja" src="/images/pareja.png">
     </section>
 
     <section class="section olive calendar-block">
@@ -900,8 +900,33 @@
     <section class="section olive gift">
       <div class="eyebrow">Tu presencia es nuestro mejor regalo</div>
       <h2 class="script">Sugerencia de regalo</h2>
-      <p class="body-copy">Si deseas tener un detalle con nosotros, dejamos esta opción.</p>
-      <a class="btn" href="#" onclick="alert('Mesa de regalos: Liverpool — Evento 123456'); return false;">Ver mesa de regalos</a>
+      <p class="body-copy">Si deseas tener un detalle con nosotros, dejamos estas dos opciones.</p>
+
+      <div style="margin:30px auto 0;max-width:390px;padding:24px 18px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.05)">
+        <div class="eyebrow">Opción 1</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:23px;margin-bottom:8px">Mesa de regalos Liverpool</div>
+        <button class="btn" type="button" onclick="document.getElementById('liverpoolGift').style.display='block';this.style.display='none'">Ver mesa de regalos</button>
+        <div id="liverpoolGift" style="display:none;margin-top:18px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55">
+            Número de evento<br>
+            <strong style="font-size:24px;letter-spacing:.06em">60030102</strong>
+          </div>
+          <a class="btn" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
+        </div>
+      </div>
+
+      <div style="margin:18px auto 0;max-width:390px;padding:24px 18px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.05)">
+        <div class="eyebrow">Opción 2</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:23px;margin-bottom:8px">Transferencia bancaria</div>
+        <button class="btn" type="button" onclick="document.getElementById('bankGift').style.display='block';this.style.display='none'">Ver número para transferencias</button>
+        <div id="bankGift" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.65">
+          <strong>Banamex</strong><br>
+          CLABE<br>
+          <strong style="font-size:20px;letter-spacing:.03em;overflow-wrap:anywhere">002180702110571551</strong><br>
+          A nombre de<br>
+          <strong>Cecilia Loyo Alonso</strong>
+        </div>
+      </div>
     </section>
 
     <section class="section paper rsvp" id="confirmacion">
