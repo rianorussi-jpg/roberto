@@ -1151,29 +1151,27 @@
       document.getElementById("thankyou").style.display = "block";
     }
 
-    async function fetchWithTimeout(url, options = {}, timeoutMs = 7000){
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeoutMs);
-      try {
-        return await fetch(url, {...options, signal: controller.signal});
-      } finally {
-        clearTimeout(timer);
-      }
-    }
-
     async function confirmationExists(guestName){
       try {
-        const check = await fetchWithTimeout(
-          "/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(),
-          {cache: "no-store"},
-          4000
-        );
+        const check = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(), {
+          cache: "no-store"
+        });
         if (!check.ok) return false;
         const result = await check.json().catch(() => ({}));
         return Boolean(result.respondido);
       } catch {
         return false;
       }
+    }
+
+    async function waitForConfirmation(guestName){
+      // Supabase puede tardar un poco en reflejar una fila recién insertada.
+      // Comprobamos varias veces antes de mostrar un error al invitado.
+      for (let attempt = 0; attempt < 6; attempt++) {
+        if (await confirmationExists(guestName)) return true;
+        await new Promise(resolve => setTimeout(resolve, 850));
+      }
+      return false;
     }
 
     form.addEventListener("submit", async (e)=>{
@@ -1192,47 +1190,53 @@
       submitButton.textContent = "Guardando...";
       formStatus.style.display = "none";
 
-      const payload = { nombre: guestName, asistira: attends, numero_asistentes: people, mensaje: message };
-      let completed = false;
+      const payload = {
+        nombre: guestName,
+        asistira: attends,
+        numero_asistentes: people,
+        mensaje: message
+      };
 
       try {
         let response = null;
         let data = {};
 
         try {
-          response = await fetchWithTimeout("/api/confirmar", {
+          response = await fetch("/api/confirmar", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(payload)
-          }, 7000);
+          });
           data = await response.json().catch(() => ({}));
-        } catch (sendError) {
-          console.warn("El envío tardó demasiado; comprobando si ya se guardó.", sendError);
+        } catch (networkError) {
+          // Puede ocurrir que Vercel pierda la respuesta después de que Supabase ya guardó.
+          console.warn("Respuesta de confirmación no recibida; verificando base de datos.", networkError);
         }
 
         if (response && response.ok) {
-          completed = true;
           showConfirmationSuccess(guestName, attends);
           return;
         }
 
-        await new Promise(resolve => setTimeout(resolve, 500));
-        if (await confirmationExists(guestName)) {
-          completed = true;
+        // Si el POST no devolvió éxito, esperamos a que la fila recién guardada
+        // sea visible antes de asumir que realmente falló.
+        if (await waitForConfirmation(guestName)) {
           showConfirmationSuccess(guestName, attends);
           return;
         }
 
         throw new Error(data.error || "No se pudo guardar la confirmación.");
       } catch (error) {
+        if (await waitForConfirmation(guestName)) {
+          showConfirmationSuccess(guestName, attends);
+          return;
+        }
+
         formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
         formStatus.style.display = "block";
+        submitButton.disabled = false;
+        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
         console.error(error);
-      } finally {
-        if (!completed && form.style.display !== "none") {
-          submitButton.disabled = false;
-          submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
-        }
       }
     });
 
