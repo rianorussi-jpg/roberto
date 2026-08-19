@@ -807,6 +807,16 @@
       border-color:#fff;
     }
 
+  
+    .gift .btn.copy-transfer{
+      margin:12px 0 18px;
+      padding:9px 14px;
+      font-size:9px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.6);
+    }
+
   </style>
 </head>
 
@@ -952,7 +962,7 @@
             Número de evento<br>
             <strong style="font-size:24px;letter-spacing:.06em">60030102</strong>
           </div>
-          <a class="btn liverpool-online" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
+          <a class="btn liverpool-online" href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/60030102" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
         </div>
       </div>
 
@@ -963,7 +973,8 @@
         <div id="bankGift" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.65">
           <strong>Banamex</strong><br>
           CLABE<br>
-          <strong style="font-size:20px;letter-spacing:.03em;overflow-wrap:anywhere">002180702110571551</strong><br>
+          <strong id="transferNumber" style="font-size:20px;letter-spacing:.03em;overflow-wrap:anywhere">002180702110571551</strong><br>
+          <button class="btn copy-transfer" type="button" onclick="copyTransferNumber(this)">Copiar número de transferencia</button><br>
           A nombre de<br>
           <strong>Cecilia Loyo Alonso</strong>
         </div>
@@ -1096,6 +1107,30 @@
       form.style.display = "none";
       document.getElementById("thankyou").style.display = "block";
     });
+
+    function copyTransferNumber(button){
+      const number = "002180702110571551";
+      const done = () => {
+        const original = button.textContent;
+        button.textContent = "¡Número copiado!";
+        setTimeout(() => button.textContent = original, 1800);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(number).then(done);
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = number;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        done();
+      }
+    }
+
   </script>
 </body>
 </html>
