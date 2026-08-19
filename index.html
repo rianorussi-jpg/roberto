@@ -1011,6 +1011,8 @@
         <button type="submit">Confirmar asistencia</button>
       </form>
 
+      <div id="formStatus" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;text-align:center"></div>
+
       <div class="thankyou" id="thankyou">
         Gracias por confirmar, <span id="confirmedGuest"></span>.<br>
         El 14 de noviembre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
@@ -1098,14 +1100,64 @@
     updateCountdown();
     setInterval(updateCountdown,1000);
 
-    // Confirmación demo
+    // Confirmación conectada a la base de datos
     const form = document.getElementById("rsvpForm");
-    form.addEventListener("submit",(e)=>{
+    const attendanceSelect = document.getElementById("attendance");
+    const peopleSelect = document.getElementById("people");
+    const formStatus = document.getElementById("formStatus");
+
+    function syncAttendance(){
+      const noAsiste = attendanceSelect.value.toLowerCase().startsWith("no");
+      peopleSelect.disabled = noAsiste;
+      if (noAsiste) peopleSelect.value = "1";
+    }
+
+    attendanceSelect.addEventListener("change", syncAttendance);
+    syncAttendance();
+
+    form.addEventListener("submit", async (e)=>{
       e.preventDefault();
+
       const guestName = document.getElementById("guestInput").value.trim();
-      document.getElementById("confirmedGuest").textContent = guestName;
-      form.style.display = "none";
-      document.getElementById("thankyou").style.display = "block";
+      const attendance = attendanceSelect.value;
+      const attends = attendance.toLowerCase().startsWith("sí") || attendance.toLowerCase().startsWith("si");
+      const people = attends ? Number(peopleSelect.value || 1) : 0;
+      const message = document.getElementById("message").value.trim();
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (!guestName || !attendance) return;
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Guardando...";
+      formStatus.style.display = "none";
+
+      try {
+        const response = await fetch("/api/confirmar", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            nombre: guestName,
+            asistira: attends,
+            numero_asistentes: people,
+            mensaje: message
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "No se pudo guardar la confirmación.");
+
+        const confirmed = document.getElementById("confirmedGuest");
+        if (confirmed) confirmed.textContent = guestName;
+
+        form.style.display = "none";
+        document.getElementById("thankyou").style.display = "block";
+      } catch (error) {
+        formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
+        formStatus.style.display = "block";
+        submitButton.disabled = false;
+        submitButton.textContent = "Confirmar asistencia";
+        console.error(error);
+      }
     });
 
     function copyTransferNumber(button){

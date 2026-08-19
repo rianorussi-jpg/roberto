@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confirmados — Roberto & Cecilia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
+    :root{--olive:#747b54;--paper:#f7f3eb;--ink:#2f2b28;--muted:#746f67;--line:#d5cec1;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:#eee8dc;color:var(--ink);font-family:Montserrat,system-ui,sans-serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:42px 20px 70px}
+    header{text-align:center;margin-bottom:30px}
+    h1{font-family:"Cormorant Garamond",serif;font-size:46px;margin:0 0 6px;color:var(--olive)}
+    .sub{font-family:"Cormorant Garamond",serif;font-size:18px;color:var(--muted)}
+    .login,.panel{background:var(--paper);border:1px solid var(--line);box-shadow:0 18px 55px rgba(0,0,0,.08)}
+    .login{max-width:430px;margin:55px auto;padding:32px}
+    label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;color:var(--muted)}
+    input{width:100%;padding:13px;border:1px solid var(--line);background:#fff;font:inherit}
+    button{border:0;background:var(--olive);color:#fff;padding:13px 18px;font:inherit;cursor:pointer}
+    .login button{width:100%;margin-top:12px}
+    .error{color:#914e46;margin-top:12px;font-size:13px}
+    .panel{display:none;padding:26px}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+    .stat{background:#fff;border:1px solid var(--line);padding:18px;text-align:center}
+    .stat strong{display:block;font-family:"Cormorant Garamond",serif;font-size:32px;color:var(--olive)}
+    .stat span{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+    .tools{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .tools input{max-width:330px}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;background:#fff}
+    th,td{text-align:left;padding:14px 12px;border-bottom:1px solid #e7e1d7;vertical-align:top}
+    th{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+    td{font-size:13px}
+    .yes{color:#4f6b43;font-weight:600}.no{color:#95544c;font-weight:600}
+    .message{max-width:360px;white-space:pre-wrap}
+    @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.panel{padding:15px}.tools{align-items:stretch;flex-direction:column}.tools input{max-width:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Confirmados</h1>
+      <div class="sub">Roberto & Cecilia</div>
+    </header>
+
+    <section class="login" id="login">
+      <label for="password">Contraseña de los novios</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="Escribe la contraseña">
+      <button id="loginBtn">Entrar</button>
+      <div class="error" id="loginError"></div>
+    </section>
+
+    <section class="panel" id="panel">
+      <div class="stats">
+        <div class="stat"><strong id="responses">0</strong><span>Respuestas</span></div>
+        <div class="stat"><strong id="yesCount">0</strong><span>Asistirán</span></div>
+        <div class="stat"><strong id="noCount">0</strong><span>No asistirán</span></div>
+        <div class="stat"><strong id="peopleCount">0</strong><span>Personas confirmadas</span></div>
+      </div>
+
+      <div class="tools">
+        <input id="search" type="search" placeholder="Buscar por nombre...">
+        <button id="refreshBtn">Actualizar lista</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Asistencia</th>
+              <th>Personas</th>
+              <th>Mensaje</th>
+              <th>Confirmó</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let password = sessionStorage.getItem("confirmadosPassword") || "";
+    let confirmations = [];
+
+    const login = document.getElementById("login");
+    const panel = document.getElementById("panel");
+    const errorBox = document.getElementById("loginError");
+    const passwordInput = document.getElementById("password");
+
+    function esc(value){
+      return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[c]));
+    }
+
+    function render(){
+      const q = document.getElementById("search").value.trim().toLowerCase();
+      const filtered = confirmations.filter(x => x.nombre.toLowerCase().includes(q));
+
+      document.getElementById("responses").textContent = confirmations.length;
+      document.getElementById("yesCount").textContent = confirmations.filter(x => x.asistira).length;
+      document.getElementById("noCount").textContent = confirmations.filter(x => !x.asistira).length;
+      document.getElementById("peopleCount").textContent =
+        confirmations.reduce((sum,x) => sum + (x.asistira ? Number(x.numero_asistentes || 0) : 0), 0);
+
+      document.getElementById("rows").innerHTML = filtered.map(x => `
+        <tr>
+          <td><strong>${esc(x.nombre)}</strong></td>
+          <td class="${x.asistira ? "yes" : "no"}">${x.asistira ? "Sí" : "No"}</td>
+          <td>${x.asistira ? esc(x.numero_asistentes) : "0"}</td>
+          <td class="message">${esc(x.mensaje || "—")}</td>
+          <td>${new Date(x.created_at).toLocaleString("es-MX", {dateStyle:"medium",timeStyle:"short"})}</td>
+        </tr>
+      `).join("");
+    }
+
+    async function load(){
+      errorBox.textContent = "";
+      const response = await fetch("/api/confirmados", {
+        headers: {"x-admin-password": password},
+        cache: "no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.status === 401) {
+        sessionStorage.removeItem("confirmadosPassword");
+        login.style.display = "block";
+        panel.style.display = "none";
+        errorBox.textContent = "Contraseña incorrecta.";
+        return false;
+      }
+
+      if (!response.ok) {
+        errorBox.textContent = data.error || "No se pudo cargar la lista.";
+        return false;
+      }
+
+      confirmations = Array.isArray(data) ? data : [];
+      login.style.display = "none";
+      panel.style.display = "block";
+      render();
+      return true;
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", async ()=>{
+      password = passwordInput.value;
+      if (!password) return;
+      sessionStorage.setItem("confirmadosPassword", password);
+      await load();
+    });
+
+    passwordInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") document.getElementById("loginBtn").click();
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", load);
+    document.getElementById("search").addEventListener("input", render);
+
+    if (password) load();
+  </script>
+</body>
+</html>
