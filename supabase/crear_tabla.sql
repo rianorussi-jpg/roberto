@@ -18,3 +18,8 @@ revoke all on sequence public.confirmaciones_id_seq from anon, authenticated;
 
 -- Las funciones de Vercel acceden con SUPABASE_SECRET_KEY,
 -- que es exclusivamente de servidor.
+
+
+-- Evita confirmaciones duplicadas por nombre.
+create unique index if not exists confirmaciones_nombre_unico_idx
+on public.confirmaciones ((lower(btrim(nombre))));

@@ -40,3 +40,16 @@ RUTAS
 IMPORTANTE
 La imagen compartida sigue esperándose en:
 /images/pareja.png
+
+
+IMPORTANTE - CORRECCIÓN DE DUPLICADOS
+-------------------------------------
+Si ya tienes confirmaciones guardadas, abre Supabase > SQL Editor y ejecuta:
+
+supabase/corregir_duplicados.sql
+
+Ese SQL:
+- elimina filas duplicadas conservando la respuesta más reciente;
+- crea una restricción real para que un mismo nombre no vuelva a duplicarse.
+
+Después sube este proyecto a Vercel y haz un nuevo deployment.

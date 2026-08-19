@@ -25,18 +25,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Invitaciones personalizadas: una sola respuesta por invitado.
-    const personalizedGuests = ["hugo capellini", "pedro martínez y familia", "antonio loyo y familia", "rafael mejía y familia", "rogelio alonso y familia", "juan josé núñez y familia", "alfonso flores y familia", "fabiola hernández +1", "ana ezeiza +1", "ana karen +1", "jesús celis", "ninive delgado", "daniela nicole arvizu", "katherin pino", "martha chávez +1", "fernanda pérez +1", "ximena tercero +1", "ximena flores", "fernanda salas", "naomi figueroa", "maría josé zaldivar", "jorge loyo y familia", "abigail loyo y familia", "jessica mejía y familia", "montserrat sanroman", "alejandra peña", "maylis chabout", "marissa mejía y jocelyn trejo", "melissa mejía +1", "raquel ramírez y familia", "cristian palavaccino y familia", "maría teresa morales", "reina vásquez y familia", "cinthya arzani", "miguel arzani", "fabiola alonso", "denise neri +1", "guadalupe martínez y familia"];
-    if (personalizedGuests.includes(cleanName.toLowerCase())) {
-      const checkResponse = await fetch(
-        `${supabaseUrl}/rest/v1/confirmaciones?select=id&nombre=eq.${encodeURIComponent(cleanName)}&limit=1`,
-        { headers: { "apikey": supabaseKey } }
-      );
-      const existing = await checkResponse.json().catch(() => []);
-      if (checkResponse.ok && Array.isArray(existing) && existing.length > 0) {
-        return res.status(409).json({ error: "Esta invitación ya fue respondida." });
-      }
+    // Idempotencia: si ese nombre ya respondió, lo tratamos como éxito.
+    // Esto evita que un doble clic, reintento del navegador o respuesta tardía
+    // termine creando otra fila.
+    const checkResponse = await fetch(
+      `${supabaseUrl}/rest/v1/confirmaciones?select=id&nombre=eq.${encodeURIComponent(cleanName)}&limit=1`,
+      { headers: { "apikey": supabaseKey } }
+    );
+
+    const existing = await checkResponse.json().catch(() => []);
+
+    if (checkResponse.ok && Array.isArray(existing) && existing.length > 0) {
+      return res.status(200).json({ ok: true, alreadyConfirmed: true });
     }
+
     const response = await fetch(`${supabaseUrl}/rest/v1/confirmaciones`, {
       method: "POST",
       headers: {
@@ -55,11 +57,18 @@ export default async function handler(req, res) {
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
+      // 23505 = violación de UNIQUE. Significa que otra solicitud alcanzó
+      // a guardar la misma confirmación antes que ésta. Para el invitado
+      // sigue siendo un envío correcto.
+      if (data && data.code === "23505") {
+        return res.status(200).json({ ok: true, alreadyConfirmed: true });
+      }
+
       console.error("Supabase insert error:", data);
       return res.status(500).json({ error: "No se pudo guardar la confirmación" });
     }
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, alreadyConfirmed: false });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error de conexión" });
