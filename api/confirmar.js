@@ -25,20 +25,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Idempotencia: si ese nombre ya respondió, lo tratamos como éxito.
-    // Esto evita que un doble clic, reintento del navegador o respuesta tardía
-    // termine creando otra fila.
-    const checkResponse = await fetch(
-      `${supabaseUrl}/rest/v1/confirmaciones?select=id&nombre=eq.${encodeURIComponent(cleanName)}&limit=1`,
-      { headers: { "apikey": supabaseKey } }
-    );
-
-    const existing = await checkResponse.json().catch(() => []);
-
-    if (checkResponse.ok && Array.isArray(existing) && existing.length > 0) {
-      return res.status(200).json({ ok: true, alreadyConfirmed: true });
-    }
-
+    // Insert directo. La restricción UNIQUE de Supabase evita duplicados.
     const response = await fetch(`${supabaseUrl}/rest/v1/confirmaciones`, {
       method: "POST",
       headers: {
@@ -54,21 +41,21 @@ export default async function handler(req, res) {
       })
     });
 
-    if (!response.ok) {
-      const raw = await response.text().catch(() => "");
-      let data = null;
-      try { data = raw ? JSON.parse(raw) : null; } catch {}
-
-      // 23505 = violación de UNIQUE. Otra solicitud ya guardó esta respuesta.
-      if ((data && data.code === "23505") || raw.includes("23505")) {
-        return res.status(200).json({ ok: true, alreadyConfirmed: true });
-      }
-
-      console.error("Supabase insert error:", raw);
-      return res.status(500).json({ error: "No se pudo guardar la confirmación" });
+    if (response.ok) {
+      return res.status(200).json({ ok: true, alreadyConfirmed: false });
     }
 
-    return res.status(200).json({ ok: true, alreadyConfirmed: false });
+    const raw = await response.text().catch(() => "");
+    let data = null;
+    try { data = raw ? JSON.parse(raw) : null; } catch {}
+
+    // Si ya existía, para el invitado cuenta como confirmación correcta.
+    if ((data && data.code === "23505") || raw.includes("23505") || raw.toLowerCase().includes("duplicate key")) {
+      return res.status(200).json({ ok: true, alreadyConfirmed: true });
+    }
+
+    console.error("Supabase insert error:", raw);
+    return res.status(500).json({ error: "No se pudo guardar la confirmación" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error de conexión" });

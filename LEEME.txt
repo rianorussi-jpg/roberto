@@ -60,3 +60,9 @@ CORRECCIÓN DEL FALSO ERROR AL CONFIRMAR
 Esta versión verifica la base de datos antes de mostrar un error.
 Si Supabase guardó la respuesta pero Vercel/navegador no recibió la respuesta HTTP,
 la invitación mostrará correctamente la confirmación en lugar de pedir un segundo clic.
+
+
+IMPORTANTE PARA ESTE FIX
+La API ahora depende de la restricción UNIQUE de Supabase para evitar duplicados.
+Asegúrate de haber ejecutado:
+supabase/corregir_duplicados.sql

@@ -1190,53 +1190,52 @@
       submitButton.textContent = "Guardando...";
       formStatus.style.display = "none";
 
-      const payload = {
-        nombre: guestName,
-        asistira: attends,
-        numero_asistentes: people,
-        mensaje: message
-      };
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
 
       try {
-        let response = null;
-        let data = {};
+        const response = await fetch("/api/confirmar", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            nombre: guestName,
+            asistira: attends,
+            numero_asistentes: people,
+            mensaje: message
+          }),
+          signal: controller.signal
+        });
 
-        try {
-          response = await fetch("/api/confirmar", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(payload)
-          });
-          data = await response.json().catch(() => ({}));
-        } catch (networkError) {
-          // Puede ocurrir que Vercel pierda la respuesta después de que Supabase ya guardó.
-          console.warn("Respuesta de confirmación no recibida; verificando base de datos.", networkError);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo guardar la confirmación.");
         }
 
-        if (response && response.ok) {
-          showConfirmationSuccess(guestName, attends);
-          return;
-        }
-
-        // Si el POST no devolvió éxito, esperamos a que la fila recién guardada
-        // sea visible antes de asumir que realmente falló.
-        if (await waitForConfirmation(guestName)) {
-          showConfirmationSuccess(guestName, attends);
-          return;
-        }
-
-        throw new Error(data.error || "No se pudo guardar la confirmación.");
+        showConfirmationSuccess(guestName, attends);
       } catch (error) {
-        if (await waitForConfirmation(guestName)) {
-          showConfirmationSuccess(guestName, attends);
-          return;
-        }
+        // Antes de mostrar error, comprobar una sola vez si sí alcanzó a guardarse.
+        try {
+          const check = await fetch(
+            "/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(),
+            {cache: "no-store"}
+          );
+          const result = await check.json().catch(() => ({}));
+          if (check.ok && result.respondido) {
+            showConfirmationSuccess(guestName, attends);
+            return;
+          }
+        } catch {}
 
         formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
         formStatus.style.display = "block";
         submitButton.disabled = false;
-        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
+        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no")
+          ? "Enviar mensaje"
+          : "Confirmar asistencia";
         console.error(error);
+      } finally {
+        clearTimeout(timer);
       }
     });
 
