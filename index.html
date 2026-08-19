@@ -766,6 +766,47 @@
       html{scroll-behavior:auto}
       *{animation:none!important;transition:none!important}
     }
+  
+    /* Botones de regalo: conservar el estilo de la invitación en todos los estados */
+    .gift .btn,
+    .gift .btn:link,
+    .gift .btn:visited,
+    .gift .btn:hover,
+    .gift .btn:active,
+    .gift .btn:focus{
+      color:#fff;
+      border-color:rgba(255,255,255,.82);
+      background:transparent;
+      appearance:none;
+      -webkit-appearance:none;
+      text-decoration:none;
+      outline:none;
+      box-shadow:none;
+    }
+
+    /* Acción secundaria que aparece después de revelar el número de evento */
+    .gift .btn.liverpool-online{
+      display:inline-block;
+      margin-top:20px;
+      padding:13px 20px;
+      background:#fff;
+      color:var(--olive);
+      border:1px solid #fff;
+      font-weight:600;
+      letter-spacing:.11em;
+      box-shadow:0 8px 22px rgba(0,0,0,.12);
+    }
+
+    .gift .btn.liverpool-online:link,
+    .gift .btn.liverpool-online:visited,
+    .gift .btn.liverpool-online:hover,
+    .gift .btn.liverpool-online:active,
+    .gift .btn.liverpool-online:focus{
+      background:#fff;
+      color:var(--olive);
+      border-color:#fff;
+    }
+
   </style>
 </head>
 
@@ -911,7 +952,7 @@
             Número de evento<br>
             <strong style="font-size:24px;letter-spacing:.06em">60030102</strong>
           </div>
-          <a class="btn" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
+          <a class="btn liverpool-online" href="https://mesaderegalos.liverpool.com.mx/" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
         </div>
       </div>
 
