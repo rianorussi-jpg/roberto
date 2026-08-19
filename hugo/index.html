@@ -848,7 +848,7 @@
               <div class="guest-label">Tenemos el gusto de invitar a</div>
               <div class="guest-name js-guest">Hugo Capellini</div>
               <div class="guest-label companion-line" style="margin-top:12px">Contemplado con 1 acompañante</div>
-              <div class="date-cover">14 · 11 · 2026</div>
+              <div class="date-cover">10.10.2026</div>
             </div>
           </div>
 
@@ -994,6 +994,10 @@
         <p class="body-copy">Agradecemos que confirmes tu asistencia antes del 25 de Septiembre.</p>
       </div>
 
+      <div class="thankyou" id="alreadyAnswered" style="display:none">
+        <div id="alreadyAnsweredText"></div>
+      </div>
+
       <form class="rsvp-form" id="rsvpForm">
         <label for="guestInput">Invitado</label>
         <input id="guestInput" name="guest" type="text" readonly>
@@ -1005,23 +1009,25 @@
           <option>No podré acompañarlos</option>
         </select>
 
-        <label for="people">Número de asistentes</label>
-        <select id="people" name="people">
+        <div id="peopleField">
+          <label for="people">Número de asistentes</label>
+          <select id="people" name="people">
           <option value="1">Solo Hugo</option>
           <option value="2">Hugo + 1 acompañante</option>
-        </select>
+          </select>
+        </div>
 
         <label for="message">Mensaje para los novios</label>
         <textarea id="message" name="message" placeholder="Escribe un mensaje..."></textarea>
 
-        <button type="submit">Confirmar asistencia</button>
+        <button id="submitRsvp" type="submit">Confirmar asistencia</button>
       </form>
 
       <div id="formStatus" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;text-align:center"></div>
 
       <div class="thankyou" id="thankyou">
         Gracias por confirmar, <span class="js-guest"></span>.<br>
-        El 14 de noviembre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
+        El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
       </div>
 
       <div class="rules">
@@ -1122,10 +1128,15 @@
     const peopleSelect = document.getElementById("people");
     const formStatus = document.getElementById("formStatus");
 
+    const peopleField = document.getElementById("peopleField");
+    const submitRsvp = document.getElementById("submitRsvp");
+
     function syncAttendance(){
       const noAsiste = attendanceSelect.value.toLowerCase().startsWith("no");
+      peopleField.style.display = noAsiste ? "none" : "block";
       peopleSelect.disabled = noAsiste;
       if (noAsiste) peopleSelect.value = "1";
+      submitRsvp.textContent = noAsiste ? "Enviar mensaje" : "Confirmar asistencia";
     }
 
     attendanceSelect.addEventListener("change", syncAttendance);
@@ -1160,18 +1171,24 @@
         });
 
         const data = await response.json().catch(() => ({}));
+        if (response.status === 409) {
+          await checkExistingConfirmation();
+          return;
+        }
         if (!response.ok) throw new Error(data.error || "No se pudo guardar la confirmación.");
 
         const confirmed = document.getElementById("confirmedGuest");
         if (confirmed) confirmed.textContent = guestName;
 
+        document.getElementById("thankyouYes").style.display = attends ? "block" : "none";
+        document.getElementById("thankyouNo").style.display = attends ? "none" : "block";
         form.style.display = "none";
         document.getElementById("thankyou").style.display = "block";
       } catch (error) {
         formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
         formStatus.style.display = "block";
         submitButton.disabled = false;
-        submitButton.textContent = "Confirmar asistencia";
+        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
         console.error(error);
       }
     });
@@ -1198,6 +1215,37 @@
         done();
       }
     }
+
+
+    async function checkExistingConfirmation(){
+      try {
+        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Hugo Capellini"), {
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (!data.respondido || !data.confirmacion) return;
+
+        const c = data.confirmacion;
+        form.style.display = "none";
+        document.getElementById("thankyou").style.display = "none";
+
+        const box = document.getElementById("alreadyAnswered");
+        const text = document.getElementById("alreadyAnsweredText");
+
+        if (c.asistira) {
+          text.innerHTML = 'Gracias por confirmar, Hugo Capellini.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
+        } else {
+          text.textContent = "El 10 de octubre será un día inolvidable.";
+        }
+        box.style.display = "block";
+      } catch (error) {
+        console.error("No se pudo comprobar la confirmación:", error);
+      }
+    }
+
+    checkExistingConfirmation();
 
   </script>
 </body>

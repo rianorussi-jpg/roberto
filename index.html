@@ -842,7 +842,7 @@
                 <span>Cecilia</span>
               </div>
               <div class="guest-label" style="font-size:18px;margin-top:8px">Tenemos el gusto de invitarte</div>
-              <div class="date-cover">14 · 11 · 2026</div>
+              <div class="date-cover">10.10.2026</div>
             </div>
           </div>
 
@@ -999,23 +999,30 @@
           <option>No podré acompañarlos</option>
         </select>
 
-        <label for="people">Número de asistentes</label>
-        <select id="people" name="people">
+        <div id="peopleField">
+          <label for="people">Número de asistentes</label>
+          <select id="people" name="people">
           <option value="1">1 persona</option>
           <option value="2">2 personas</option>
-        </select>
+          </select>
+        </div>
 
         <label for="message">Mensaje para los novios</label>
         <textarea id="message" name="message" placeholder="Escribe un mensaje..."></textarea>
 
-        <button type="submit">Confirmar asistencia</button>
+        <button id="submitRsvp" type="submit">Confirmar asistencia</button>
       </form>
 
       <div id="formStatus" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;text-align:center"></div>
 
       <div class="thankyou" id="thankyou">
-        Gracias por confirmar, <span id="confirmedGuest"></span>.<br>
-        El 14 de noviembre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
+        <div id="thankyouYes">
+          Gracias por confirmar, <span id="confirmedGuest"></span>.<br>
+          El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
+        </div>
+        <div id="thankyouNo" style="display:none">
+          El 10 de octubre será un día inolvidable.
+        </div>
       </div>
 
       <div class="rules">
@@ -1106,10 +1113,15 @@
     const peopleSelect = document.getElementById("people");
     const formStatus = document.getElementById("formStatus");
 
+    const peopleField = document.getElementById("peopleField");
+    const submitRsvp = document.getElementById("submitRsvp");
+
     function syncAttendance(){
       const noAsiste = attendanceSelect.value.toLowerCase().startsWith("no");
+      peopleField.style.display = noAsiste ? "none" : "block";
       peopleSelect.disabled = noAsiste;
       if (noAsiste) peopleSelect.value = "1";
+      submitRsvp.textContent = noAsiste ? "Enviar mensaje" : "Confirmar asistencia";
     }
 
     attendanceSelect.addEventListener("change", syncAttendance);
@@ -1149,13 +1161,15 @@
         const confirmed = document.getElementById("confirmedGuest");
         if (confirmed) confirmed.textContent = guestName;
 
+        document.getElementById("thankyouYes").style.display = attends ? "block" : "none";
+        document.getElementById("thankyouNo").style.display = attends ? "none" : "block";
         form.style.display = "none";
         document.getElementById("thankyou").style.display = "block";
       } catch (error) {
         formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
         formStatus.style.display = "block";
         submitButton.disabled = false;
-        submitButton.textContent = "Confirmar asistencia";
+        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
         console.error(error);
       }
     });

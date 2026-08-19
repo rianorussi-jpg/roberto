@@ -25,6 +25,18 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Invitaciones personalizadas: una sola respuesta por invitado.
+    // Hugo no puede volver a confirmar ni cambiar su respuesta desde el formulario.
+    if (cleanName.toLowerCase() === "hugo capellini") {
+      const checkResponse = await fetch(
+        `${supabaseUrl}/rest/v1/confirmaciones?select=id&nombre=eq.${encodeURIComponent(cleanName)}&limit=1`,
+        { headers: { "apikey": supabaseKey } }
+      );
+      const existing = await checkResponse.json().catch(() => []);
+      if (checkResponse.ok && Array.isArray(existing) && existing.length > 0) {
+        return res.status(409).json({ error: "Esta invitación ya fue respondida." });
+      }
+    }
     const response = await fetch(`${supabaseUrl}/rest/v1/confirmaciones`, {
       method: "POST",
       headers: {
