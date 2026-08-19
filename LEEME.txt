@@ -53,3 +53,10 @@ Ese SQL:
 - crea una restricción real para que un mismo nombre no vuelva a duplicarse.
 
 Después sube este proyecto a Vercel y haz un nuevo deployment.
+
+
+CORRECCIÓN DEL FALSO ERROR AL CONFIRMAR
+---------------------------------------
+Esta versión verifica la base de datos antes de mostrar un error.
+Si Supabase guardó la respuesta pero Vercel/navegador no recibió la respuesta HTTP,
+la invitación mostrará correctamente la confirmación en lugar de pedir un segundo clic.

@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       headers: {
         "Content-Type": "application/json",
         "apikey": supabaseKey,
-        "Prefer": "return=representation"
+        "Prefer": "return=minimal"
       },
       body: JSON.stringify({
         nombre: cleanName,
@@ -54,17 +54,17 @@ export default async function handler(req, res) {
       })
     });
 
-    const data = await response.json().catch(() => null);
-
     if (!response.ok) {
-      // 23505 = violación de UNIQUE. Significa que otra solicitud alcanzó
-      // a guardar la misma confirmación antes que ésta. Para el invitado
-      // sigue siendo un envío correcto.
-      if (data && data.code === "23505") {
+      const raw = await response.text().catch(() => "");
+      let data = null;
+      try { data = raw ? JSON.parse(raw) : null; } catch {}
+
+      // 23505 = violación de UNIQUE. Otra solicitud ya guardó esta respuesta.
+      if ((data && data.code === "23505") || raw.includes("23505")) {
         return res.status(200).json({ ok: true, alreadyConfirmed: true });
       }
 
-      console.error("Supabase insert error:", data);
+      console.error("Supabase insert error:", raw);
       return res.status(500).json({ error: "No se pudo guardar la confirmación" });
     }
 
