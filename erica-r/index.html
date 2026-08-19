@@ -1,0 +1,1333 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#747b54" />
+  <title>Cecilia & Roberto — Invitación</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Allura&display=swap');
+
+    :root{
+      --olive:#747b54;
+      --olive-dark:#5d6443;
+      --olive-soft:#90966f;
+      --paper:#f7f3eb;
+      --paper-2:#eee8dc;
+      --ink:#2f2b28;
+      --muted:#746f67;
+      --line:#cfc7ba;
+      --white:#fff;
+      --shadow:0 28px 80px rgba(0,0,0,.22);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(116,123,84,.06), transparent 30%),
+        linear-gradient(#f4f0e7, #ebe5d9 58%, #ddd5c8 100%);
+      font-family:"Montserrat",system-ui,-apple-system,sans-serif;
+      overflow-x:hidden;
+    }
+
+    button,a{font:inherit}
+    a{color:inherit}
+
+    /* =========================
+       APERTURA / SOBRE
+    ========================= */
+    .opening{
+      min-height:180vh;
+      position:relative;
+    }
+
+    .opening-stage{
+      height:100vh;
+      position:sticky;
+      top:0;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 50% 25%, rgba(255,255,255,.95), transparent 34%),
+        linear-gradient(155deg,#f7f3eb,#eee8dc 58%,#ded6c8);
+    }
+
+    .opening-stage:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.22;
+      pointer-events:none;
+      background-image:
+        repeating-radial-gradient(circle at 15% 35%, #fff 0 1px, transparent 1px 4px);
+      background-size:6px 6px;
+      mix-blend-mode:soft-light;
+    }
+
+    .intro-title{
+      position:absolute;
+      top:7vh;
+      width:min(92vw,560px);
+      text-align:center;
+      color:#67634f;
+      letter-spacing:.11em;
+      font-size:11px;
+      text-transform:uppercase;
+      z-index:6;
+      opacity:.78;
+      transition:opacity .2s ease;
+    }
+
+    .envelope-wrap{
+      width:min(88vw,520px);
+      aspect-ratio:1.45/1;
+      perspective:1300px;
+      position:relative;
+      filter:drop-shadow(0 30px 50px rgba(0,0,0,.35));
+    }
+
+    .envelope{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(140deg,#79805a,#666d4b);
+      border-radius:6px;
+      overflow:hidden;
+    }
+
+    /* Solo permitimos que la tarjeta sobresalga cuando el usuario ya empezó a abrir el sobre */
+    .envelope.is-open{
+      overflow:visible;
+    }
+
+    .envelope:before,
+    .envelope:after{
+      content:"";
+      position:absolute;
+      bottom:0;
+      width:58%;
+      height:74%;
+      background:#6d7451;
+      z-index:3;
+    }
+
+    .envelope:before{
+      left:0;
+      clip-path:polygon(0 100%,0 18%,100% 100%);
+    }
+
+    .envelope:after{
+      right:0;
+      clip-path:polygon(100% 100%,100% 18%,0 100%);
+      background:#737a57;
+    }
+
+    .envelope-front{
+      position:absolute;
+      inset:auto 0 0 0;
+      height:80%;
+      background:linear-gradient(170deg,#7f8660,#707751);
+      clip-path:polygon(0 25%,50% 75%,100% 25%,100% 100%,0 100%);
+      z-index:6;
+      border-radius:0 0 6px 6px;
+    }
+
+    .flap{
+      position:absolute;
+      z-index:7;
+      left:0;
+      top:0;
+      width:100%;
+      height:58%;
+      background:linear-gradient(180deg,#87906a,#737b55);
+      clip-path:polygon(0 0,100% 0,50% 100%);
+      transform-origin:50% 0;
+      transform:rotateX(0deg);
+      backface-visibility:hidden;
+      transition:transform .08s linear;
+    }
+
+    .seal{
+      position:absolute;
+      top:43%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      color:#f6f1e7;
+      border:1px solid rgba(255,255,255,.6);
+      font-family:"Cormorant Garamond",serif;
+      font-style:italic;
+      letter-spacing:.08em;
+      z-index:9;
+      background:rgba(98,105,70,.8);
+      box-shadow:0 5px 18px rgba(0,0,0,.2);
+      transition:opacity .2s ease, transform .2s ease;
+    }
+
+    .inner-card{
+      position:absolute;
+      width:86%;
+      left:7%;
+      height:125%;
+      bottom:10%;
+      z-index:2;
+      background:var(--paper);
+      border-radius:4px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:42px 28px;
+      text-align:center;
+      box-shadow:0 12px 36px rgba(0,0,0,.16);
+      transform:translateY(88%);
+      transition:transform .08s linear;
+      overflow:hidden;
+    }
+
+    .inner-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      opacity:.22;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(103,90,67,.15), transparent 20%),
+        radial-gradient(circle at 80% 65%, rgba(103,90,67,.08), transparent 25%);
+      pointer-events:none;
+    }
+
+    .monogram{
+      font-family:"Cormorant Garamond",serif;
+      font-size:14px;
+      letter-spacing:.25em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+
+    .names{
+      font-family:"Allura","Cormorant Garamond",serif;
+      font-size:clamp(58px,11vw,82px);
+      line-height:.72;
+      color:#666d4b;
+      margin:8px 0 24px;
+      text-shadow:0 1px 0 #fff;
+    }
+    .names span{display:block}
+    .names .amp{font-size:.6em;margin:12px 0 6px}
+
+    .guest-label{
+      margin-top:4px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:14px;
+      font-style:italic;
+      color:var(--muted);
+    }
+
+    .guest-name{
+      margin-top:5px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:clamp(24px,6vw,38px);
+      font-weight:500;
+      border-bottom:1px solid #b8b09f;
+      padding:0 18px 5px;
+      color:#47433f;
+    }
+
+    .date-cover{
+      font-family:"Cormorant Garamond",serif;
+      margin-top:22px;
+      font-size:17px;
+      letter-spacing:.18em;
+    }
+
+    .closed-preview{
+      position:absolute;
+      inset:0;
+      z-index:3;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding-top:0;
+      pointer-events:none;
+      transition:opacity .15s linear, transform .15s linear;
+    }
+    .closed-monogram{
+      font-family:"Cormorant Garamond",serif;
+      font-size:34px;
+      font-style:italic;
+      letter-spacing:.16em;
+      color:#666d4b;
+      margin-bottom:18px;
+    }
+    .closed-guest{
+      font-family:"Cormorant Garamond",serif;
+      font-size:clamp(24px,6vw,34px);
+      font-style:italic;
+      color:#4a4840;
+      border-bottom:1px solid #b8b09f;
+      padding:0 12px 4px;
+    }
+    .opened-content{
+      position:relative;
+      z-index:2;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .16s linear, transform .16s linear;
+    }
+    .inner-card.is-opening .closed-preview{
+      opacity:0;
+      transform:translateY(-10px);
+    }
+    .inner-card.is-opening .opened-content{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .scroll-hint{
+      position:absolute;
+      bottom:6vh;
+      z-index:8;
+      color:#6e7058;
+      text-align:center;
+      font-size:10px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      opacity:.8;
+    }
+    .scroll-hint i{
+      display:block;
+      width:1px;
+      height:32px;
+      margin:12px auto 0;
+      background:linear-gradient(#747b54,transparent);
+      animation:hint 1.6s ease-in-out infinite;
+    }
+    @keyframes hint{
+      0%,100%{transform:scaleY(.45);transform-origin:top;opacity:.35}
+      50%{transform:scaleY(1);opacity:1}
+    }
+
+    /* =========================
+       INVITACIÓN
+    ========================= */
+    .invite{
+      width:min(100%,520px);
+      margin:0 auto;
+      background:var(--paper);
+      box-shadow:var(--shadow);
+      min-height:100vh;
+      overflow:hidden;
+    }
+
+    .section{
+      position:relative;
+      padding:64px 32px;
+      text-align:center;
+    }
+
+    .section.paper{
+      background:
+        radial-gradient(circle at 30% 20%,rgba(111,99,73,.06),transparent 18%),
+        var(--paper);
+    }
+    .section.olive{
+      background:var(--olive);
+      color:white;
+    }
+
+    .script{
+      font-family:"Allura","Cormorant Garamond",serif;
+      font-size:48px;
+      font-weight:400;
+      margin:0 0 10px;
+      line-height:1;
+    }
+
+    .serif-title{
+      font-family:"Cormorant Garamond",serif;
+      font-size:31px;
+      font-weight:500;
+      margin:0 0 14px;
+      letter-spacing:.02em;
+    }
+
+    .eyebrow{
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      margin-bottom:12px;
+      opacity:.8;
+    }
+
+    .body-copy{
+      font-family:"Cormorant Garamond",serif;
+      font-size:17px;
+      line-height:1.55;
+      max-width:390px;
+      margin:0 auto;
+    }
+
+    .cover{
+      min-height:690px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding-bottom:52px;
+      background:
+        linear-gradient(to bottom,rgba(78,83,58,.22),rgba(28,28,20,.12)),
+        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85') center/cover;
+      color:#fff;
+      isolation:isolate;
+    }
+    .cover:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:linear-gradient(to bottom,rgba(28,31,22,.14),rgba(32,34,23,.45));
+    }
+
+    .cover-card{
+      background:rgba(103,111,77,.92);
+      padding:34px 24px;
+      width:calc(100% - 44px);
+      margin:0 auto;
+      box-shadow:0 18px 40px rgba(0,0,0,.2);
+      backdrop-filter:blur(2px);
+    }
+    .cover .script{font-size:56px}
+    .cover .cover-amp{
+      font-family:"Cormorant Garamond",serif;
+      font-size:22px;
+      opacity:.9;
+      margin:2px 0 -2px;
+    }
+
+    .quote{
+      font-family:"Cormorant Garamond",serif;
+      font-size:18px;
+      font-style:italic;
+      line-height:1.55;
+      padding:30px 36px;
+      background:#fbf8f2;
+    }
+
+    .photo{
+      width:calc(100% - 58px);
+      margin:0 auto;
+      aspect-ratio:4/5;
+      object-fit:cover;
+      display:block;
+      box-shadow:0 16px 38px rgba(0,0,0,.12);
+    }
+
+    .couple-photo{
+      filter:grayscale(100%);
+      -webkit-filter:grayscale(100%);
+    }
+
+    .music{
+      padding:26px 32px 42px;
+      text-align:center;
+    }
+    .music-title{
+      font-family:"Cormorant Garamond",serif;
+      font-size:17px;
+      margin-bottom:10px;
+      font-style:italic;
+    }
+    .player{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:13px;
+    }
+    .player button{
+      border:0;
+      background:transparent;
+      font-size:18px;
+      cursor:pointer;
+      color:var(--ink);
+    }
+    .play{
+      width:46px;height:46px;border-radius:50%!important;
+      background:#5f5d5c!important;color:white!important;
+      display:grid;place-items:center;
+    }
+    .track{
+      height:1px;background:#aaa;width:150px;margin:0 auto 12px;
+      position:relative;
+    }
+    .track:before{
+      content:"";position:absolute;left:0;top:-3px;width:7px;height:7px;border-radius:50%;background:#6b6a66;
+    }
+
+    .calendar-block{
+      padding:60px 26px 70px;
+    }
+    .blessing{
+      font-family:"Cormorant Garamond",serif;
+      font-size:17px;
+      line-height:1.55;
+      max-width:360px;
+      margin:0 auto 38px;
+    }
+    .big-day{
+      font-family:"Cormorant Garamond",serif;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      font-size:17px;
+      margin-top:34px;
+    }
+    .date-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:22px;
+      margin:18px 0 22px;
+      font-family:"Cormorant Garamond",serif;
+    }
+    .date-row .day{
+      font-family:"Allura",serif;
+      font-size:66px;
+      line-height:1;
+    }
+    .date-row .side{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      padding:7px 0;
+      border-top:1px solid rgba(255,255,255,.7);
+      border-bottom:1px solid rgba(255,255,255,.7);
+      min-width:76px;
+    }
+
+    .countdown{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin:28px auto 0;
+      max-width:370px;
+    }
+    .countdown div{
+      padding:13px 6px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.05);
+    }
+    .countdown strong{
+      display:block;
+      font-family:"Cormorant Garamond",serif;
+      font-size:29px;
+      font-weight:500;
+    }
+    .countdown span{
+      font-size:8px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      opacity:.8;
+    }
+
+    .details{
+      display:grid;
+      gap:26px;
+      margin-top:32px;
+    }
+    .detail-card{
+      padding:28px 20px 30px;
+      border:1px solid #d4ccbf;
+      background:#fbf8f2;
+    }
+    .icon{
+      width:56px;height:56px;
+      margin:0 auto 12px;
+      border:1px solid #a99f91;
+      border-radius:50%;
+      display:grid;place-items:center;
+      font-size:24px;
+    }
+    .place{
+      font-family:"Cormorant Garamond",serif;
+      font-size:24px;
+      font-weight:600;
+      margin:10px 0 3px;
+    }
+    .small{
+      font-size:11px;
+      line-height:1.6;
+      color:#6f6a63;
+    }
+    .btn{
+      display:inline-block;
+      margin-top:18px;
+      padding:10px 18px;
+      border:1px solid currentColor;
+      border-radius:2px;
+      text-decoration:none;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      cursor:pointer;
+      background:transparent;
+    }
+    .btn.fill{
+      background:var(--olive);
+      color:#fff;
+      border-color:var(--olive);
+    }
+
+    .timeline{
+      margin:38px auto 0;
+      max-width:350px;
+      text-align:left;
+      position:relative;
+      padding-left:36px;
+    }
+    .timeline:before{
+      content:"";
+      position:absolute;
+      left:10px;
+      top:8px;
+      bottom:8px;
+      width:1px;
+      background:#b8b1a6;
+    }
+    .event{
+      position:relative;
+      padding:0 0 26px 0;
+      display:grid;
+      grid-template-columns:78px 1fr;
+      gap:10px;
+      align-items:start;
+    }
+    .event:last-child{padding-bottom:0}
+    .event:before{
+      content:"";
+      position:absolute;
+      left:-31px;
+      top:7px;
+      width:9px;height:9px;border-radius:50%;
+      background:var(--paper);
+      border:1px solid #77726b;
+    }
+    .event time{
+      font-family:"Cormorant Garamond",serif;
+      font-size:14px;
+      font-weight:600;
+    }
+    .event span{
+      font-size:10px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      line-height:1.45;
+    }
+
+    .dress{
+      margin-top:34px;
+      display:flex;
+      justify-content:center;
+      gap:28px;
+      align-items:flex-end;
+      font-size:70px;
+      line-height:1;
+    }
+    .dress-note{
+      margin:18px auto 0;
+      max-width:330px;
+      font-family:"Cormorant Garamond",serif;
+      font-style:italic;
+      font-size:16px;
+    }
+
+    .gift{
+      padding-bottom:72px;
+    }
+    .qr{
+      width:180px;
+      aspect-ratio:1;
+      margin:26px auto 12px;
+      background:
+        linear-gradient(90deg,#fff 8px,transparent 8px) 0 0/18px 18px,
+        linear-gradient(#fff 8px,transparent 8px) 0 0/18px 18px,
+        #25251f;
+      border:12px solid #fff;
+      box-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+
+    .rsvp{
+      padding:68px 30px 74px;
+    }
+    .rsvp-card{
+      background:#6e7551;
+      color:#fff;
+      padding:38px 26px;
+      margin:-68px -30px 42px;
+    }
+    .rsvp-form{
+      display:grid;
+      gap:12px;
+      margin-top:26px;
+      text-align:left;
+    }
+    .rsvp-form label{
+      font-size:9px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:#716c65;
+    }
+    .rsvp-form input,.rsvp-form select,.rsvp-form textarea{
+      width:100%;
+      border:1px solid #d0c9bd;
+      background:#fbf8f2;
+      padding:12px 12px;
+      outline:none;
+      color:#333;
+      font-family:"Montserrat",sans-serif;
+    }
+    .rsvp-form textarea{min-height:90px;resize:vertical}
+    .rsvp-form button{
+      margin-top:6px;
+      border:0;
+      background:var(--olive);
+      color:white;
+      padding:14px;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:10px;
+      cursor:pointer;
+    }
+    .thankyou{
+      display:none;
+      padding:24px 12px 2px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:21px;
+      line-height:1.5;
+      text-align:center;
+    }
+
+    .rules{
+      border-top:1px solid #d8d0c4;
+      margin-top:46px;
+      padding-top:36px;
+    }
+    .rule{
+      margin:24px auto 0;
+      max-width:330px;
+    }
+    .rule strong{
+      display:block;
+      font-family:"Cormorant Garamond",serif;
+      font-size:18px;
+      margin-bottom:6px;
+    }
+    .rule p{
+      margin:0;
+      font-size:11px;
+      line-height:1.6;
+      color:#6d6861;
+    }
+
+    .final-photo{
+      width:calc(100% - 60px);
+      display:block;
+      margin:38px auto 0;
+      aspect-ratio:4/5;
+      object-fit:cover;
+    }
+
+    footer{
+      background:#5e6544;
+      color:white;
+      text-align:center;
+      padding:34px 24px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:16px;
+      letter-spacing:.04em;
+    }
+
+    @media (min-width:720px){
+      .invite{margin:60px auto 100px;border-radius:3px}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *{animation:none!important;transition:none!important}
+    }
+  
+    /* Botones de regalo: conservar el estilo de la invitación en todos los estados */
+    .gift .btn,
+    .gift .btn:link,
+    .gift .btn:visited,
+    .gift .btn:hover,
+    .gift .btn:active,
+    .gift .btn:focus{
+      color:#fff;
+      border-color:rgba(255,255,255,.82);
+      background:transparent;
+      appearance:none;
+      -webkit-appearance:none;
+      text-decoration:none;
+      outline:none;
+      box-shadow:none;
+    }
+
+    /* Acción secundaria que aparece después de revelar el número de evento */
+    .gift .btn.liverpool-online{
+      display:inline-block;
+      margin-top:20px;
+      padding:13px 20px;
+      background:#fff;
+      color:var(--olive);
+      border:1px solid #fff;
+      font-weight:600;
+      letter-spacing:.11em;
+      box-shadow:0 8px 22px rgba(0,0,0,.12);
+    }
+
+    .gift .btn.liverpool-online:link,
+    .gift .btn.liverpool-online:visited,
+    .gift .btn.liverpool-online:hover,
+    .gift .btn.liverpool-online:active,
+    .gift .btn.liverpool-online:focus{
+      background:#fff;
+      color:var(--olive);
+      border-color:#fff;
+    }
+
+  
+    .gift .btn.copy-transfer{
+      margin:12px 0 18px;
+      padding:9px 14px;
+      font-size:9px;
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.6);
+    }
+
+  </style>
+</head>
+
+<body>
+  <!--
+    INVITACIÓN PERSONALIZADA:
+    Invitado: Erica Romagnoli Cruz
+    Pase contemplado para Hugo + 1 acompañante.
+  -->
+
+  <section class="opening" id="inicio">
+    <div class="opening-stage">
+      <div class="intro-title">Desliza hacia abajo para abrir tu invitación</div>
+
+      <div class="envelope-wrap" aria-label="Sobre de invitación">
+        <div class="envelope" id="envelope">
+          <div class="inner-card" id="innerCard">
+            <div class="closed-preview" id="closedPreview">
+              <div class="closed-monogram">C &amp; R</div>
+            </div>
+
+            <div class="opened-content" id="openedContent">
+              <div class="monogram">Nuestra boda</div>
+              <div class="names">
+                <span>Cecilia</span>
+                <span class="amp">&amp;</span>
+                <span>Roberto</span>
+              </div>
+              <div class="guest-label">Tenemos el gusto de invitar a</div>
+              <div class="guest-name js-guest">Erica Romagnoli Cruz</div>
+              <div class="guest-label companion-line" style="margin-top:12px">Pase personal</div>
+              <div class="date-cover">10.10.2026</div>
+            </div>
+          </div>
+
+          <div class="flap" id="flap"></div>
+          <div class="envelope-front"></div>
+          <div class="seal" id="seal">C & R</div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">Abrir invitación<i></i></div>
+    </div>
+  </section>
+
+  <main class="invite">
+    <section class="section cover">
+      <div class="cover-card">
+        <div class="eyebrow">Nos casamos</div>
+        <h1 class="script">Cecilia</h1>
+        <div class="cover-amp">&</div>
+        <h1 class="script">Roberto</h1>
+        <div style="margin-top:18px;font-family:'Cormorant Garamond',serif;letter-spacing:.16em">10.10.2026</div>
+      </div>
+    </section>
+
+    <section class="quote">
+      “De nadie seré, solo de ti. Hasta que mis huesos se vuelvan cenizas y mi corazón deje de latir.”
+    </section>
+
+    <section class="section paper" style="padding-top:26px">
+      <img class="photo couple-photo" alt="Pareja" src="/images/pareja.png">
+    </section>
+
+    <section class="section olive calendar-block">
+      <div class="blessing">
+        Con la bendición de Dios y de nuestros padres, tenemos el honor de invitarte a nuestra boda.
+      </div>
+      <div class="eyebrow">Octubre</div>
+      <div class="date-row">
+        <div class="side">Sábado</div>
+        <div class="day">10</div>
+        <div class="side">2026</div>
+      </div>
+
+      <div class="big-day">Faltan</div>
+      <div class="countdown" id="countdown">
+        <div><strong id="cdDays">00</strong><span>Días</span></div>
+        <div><strong id="cdHours">00</strong><span>Horas</span></div>
+        <div><strong id="cdMin">00</strong><span>Min</span></div>
+        <div><strong id="cdSec">00</strong><span>Seg</span></div>
+      </div>
+    </section>
+
+    <section class="section paper">
+      <div class="eyebrow">Con mucha ilusión queremos compartir contigo</div>
+      <h2 class="script">Nuestro gran día</h2>
+
+      <div class="details">
+        <div class="detail-card">
+          <div class="icon">♰</div>
+          <h3 class="serif-title">Ceremonia Religiosa</h3>
+          <div class="place">Parroquia del Purísimo Corazón de María</div>
+          <div class="small">5:30 pm<br>Gabriel Mancera 415, Col del Valle, Ciudad de México</div>
+          <a class="btn" href="https://www.google.com/maps/dir//Parroquia+del+Pur%C3%ADsimo+Coraz%C3%B3n+de+Mar%C3%ADa,+Gabriel+Mancera+415,+Col+del+Valle+Centro,+Benito+Ju%C3%A1rez,+03103+Ciudad+de+M%C3%A9xico,+CDMX/@20.6525214,-100.3161132,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x85d1ff0c0a519d49:0xb096ad5f300bd99e!2m2!1d-99.1633648!2d19.390833?entry=ttu&g_ep=EgoyMDI2MDgxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Ver ubicación</a>
+        </div>
+
+        <div class="detail-card">
+          <div class="icon">♢</div>
+          <h3 class="serif-title">Recepción</h3>
+          <div class="place">Salón Monarquia Coronado Imperial</div>
+          <div class="small">7:30 pm<br>Av. México Coyoacán 102, Sta Cruz Atoyac, Ciudad de México</div>
+          <a class="btn" href="https://www.google.com/maps/dir//Monarquia+Coronado+Imperial,+Av.+M%C3%A9xico+Coyoac%C3%A1n+102,+Sta+Cruz+Atoyac,+Benito+Ju%C3%A1rez,+03310+Ciudad+de+M%C3%A9xico,+CDMX/@20.6525214,-100.3161132,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x85d1ffbc6c679975:0x8b2df37a902a3121!2m2!1d-99.163177!2d19.368785?entry=ttu&g_ep=EgoyMDI2MDgxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Ver ubicación</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section paper" style="padding-top:22px;padding-bottom:34px">
+      <div class="eyebrow">Para que no te pierdas nada</div>
+      <h2 class="script">Itinerario</h2>
+
+      <div class="timeline">
+        <div class="event"><time>5:30 pm</time><span>Ceremonia religiosa</span></div>
+        <div class="event"><time>7:30 pm</time><span>Cóctel de bienvenida</span></div>
+        <div class="event"><time>8:30 pm</time><span>Primer baile, vals y brindis</span></div>
+        <div class="event"><time>9:30 pm</time><span>Cena</span></div>
+        <div class="event"><time>10:30 pm</time><span>Fiesta</span></div>
+        <div class="event"><time>3:00 am</time><span>Fin</span></div>
+      </div>
+    </section>
+
+    <section class="section paper" style="padding-top:0">
+      <div style="width:calc(100% - 24px);height:1px;background:#cfc7ba;margin:0 auto 38px;"></div>
+
+      <div>
+        <div class="eyebrow">Queremos verte increíble</div>
+        <h2 class="script">Código de vestimenta</h2>
+        <div class="place">Elegante - Formal de noche</div>
+        <p class="body-copy" style="margin-top:14px">
+          Para esta celebración, les pedimos vestir de manera elegante y formal.<br><br>
+          <strong>Mujeres:</strong> Vestido largo de noche.<br>
+          <strong>Hombres:</strong> Traje formal.
+        </p>
+        <p class="dress-note">Con cariño les pedimos evitar prendas en color blanco y tonos similares.</p>
+      </div>
+    </section>
+
+    <section class="section olive gift">
+      <div class="eyebrow">Tu presencia es nuestro mejor regalo</div>
+      <h2 class="script">Sugerencia de regalo</h2>
+      <p class="body-copy">Si deseas tener un detalle con nosotros, dejamos estas dos opciones.</p>
+
+      <div style="margin:30px auto 0;max-width:390px;padding:24px 18px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.05)">
+        <div class="eyebrow">Opción 1</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:23px;margin-bottom:8px">Mesa de regalos Liverpool</div>
+        <button class="btn" type="button" onclick="document.getElementById('liverpoolGift').style.display='block';this.style.display='none'">Ver mesa de regalos</button>
+        <div id="liverpoolGift" style="display:none;margin-top:18px">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55">
+            Número de evento<br>
+            <strong style="font-size:24px;letter-spacing:.06em">60030102</strong>
+          </div>
+          <a class="btn liverpool-online" href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/60030102" target="_blank" rel="noopener">Ir a la mesa de regalos Liverpool en línea</a>
+        </div>
+      </div>
+
+      <div style="margin:18px auto 0;max-width:390px;padding:24px 18px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.05)">
+        <div class="eyebrow">Opción 2</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:23px;margin-bottom:8px">Transferencia bancaria</div>
+        <button class="btn" type="button" onclick="document.getElementById('bankGift').style.display='block';this.style.display='none'">Ver número para transferencias</button>
+        <div id="bankGift" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.65">
+          <strong>Banamex</strong><br>
+          CLABE<br>
+          <strong id="transferNumber" style="font-size:20px;letter-spacing:.03em;overflow-wrap:anywhere">002180702110571551</strong><br>
+          <button class="btn copy-transfer" type="button" onclick="copyTransferNumber(this)">Copiar número de transferencia</button><br>
+          A nombre de<br>
+          <strong>Cecilia Loyo Alonso</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section paper rsvp" id="confirmacion">
+      <div class="rsvp-card">
+        <div class="eyebrow">Tu respuesta es muy importante</div>
+        <h2 class="script">Confirmación</h2>
+        <p class="body-copy">Agradecemos que confirmes tu asistencia antes del 25 de Septiembre.</p>
+      </div>
+
+      <div class="thankyou" id="alreadyAnswered" style="display:none">
+        <div id="alreadyAnsweredText"></div>
+      </div>
+
+      <form class="rsvp-form" id="rsvpForm">
+        <label for="guestInput">Invitado</label>
+        <input id="guestInput" name="guest" type="text" readonly value="Erica Romagnoli Cruz">
+
+        <label for="attendance">¿Podrás acompañarnos?</label>
+        <select id="attendance" name="attendance" required>
+          <option value="">Selecciona una opción</option>
+          <option>Sí, ahí estaré</option>
+          <option>No podré acompañarlos</option>
+        </select>
+
+        <div id="peopleField">
+          <label for="people">Número de asistentes</label>
+          <select id="people" name="people"><option value="1">1 persona</option></select>
+        </div>
+
+        <label for="message">Mensaje para los novios</label>
+        <textarea id="message" name="message" placeholder="Escribe un mensaje..."></textarea>
+
+        <button id="submitRsvp" type="submit">Confirmar asistencia</button>
+      </form>
+
+      <div id="formStatus" style="display:none;margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:17px;text-align:center"></div>
+
+      <div class="thankyou" id="thankyou">
+        <div id="thankyouYes">
+          Gracias por confirmar, <span id="confirmedGuest"></span>.<br>
+          El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.
+        </div>
+        <div id="thankyouNo" style="display:none">
+          El 10 de octubre será un día inolvidable.
+        </div>
+      </div>
+
+      <div class="rules">
+        <div class="eyebrow">Recomendaciones</div>
+
+        <div class="rule">
+          <strong>Ser puntual</strong>
+          <p>Te pedimos seguir las indicaciones del personal para disfrutar cada momento de la celebración.</p>
+        </div>
+
+        <div class="rule">
+          <strong>Evento para adultos</strong>
+          <p>Esta celebración ha sido pensada para adultos. Agradecemos mucho tu comprensión.</p>
+        </div>
+
+        <div class="rule">
+          <strong>Esperamos contar con tu presencia</strong>
+          <p>Tu compañía hará este día todavía más especial.</p>
+        </div>
+      </div>
+</section>
+
+    <footer>
+      Cecilia & Roberto · 10.10.2026
+    </footer>
+  </main>
+
+  <script>
+    const DEFAULT_GUEST = "Erica Romagnoli Cruz";
+
+    // Nombre personalizado por URL:
+    // index.html?invitado=Santiago
+    const params = new URLSearchParams(location.search);
+    const guest = (params.get("invitado") || DEFAULT_GUEST).trim();
+
+    document.querySelectorAll(".js-guest").forEach(el => el.textContent = guest);
+    document.getElementById("guestInput").value = guest;
+
+    // Animación del sobre controlada por el scroll
+    const opening = document.querySelector(".opening");
+    const flap = document.getElementById("flap");
+    const envelope = document.getElementById("envelope");
+    const card = document.getElementById("innerCard");
+    const seal = document.getElementById("seal");
+    const intro = document.querySelector(".intro-title");
+
+    function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+    function animateEnvelope(){
+      const rect = opening.getBoundingClientRect();
+      const total = opening.offsetHeight - innerHeight;
+      const progress = clamp(-rect.top / Math.max(total,1),0,1);
+
+      // Mientras está totalmente cerrado solo mostramos C&R y el nombre del invitado.
+      // El resto de la información aparece apenas comienza la apertura.
+      card.classList.toggle("is-opening", progress > 0.16);
+      envelope.classList.toggle("is-open", progress > 0.20);
+
+      // 0-45%: se levanta la solapa
+      const flapProgress = clamp(progress / .45, 0, 1);
+      flap.style.transform = `rotateX(${-165 * flapProgress}deg)`;
+
+      // La tarjeta permanece completamente dentro del sobre al inicio.
+      // Después de abrirse la solapa comienza a salir hacia arriba.
+      const cardProgress = clamp((progress - .20) / .80, 0, 1);
+      card.style.transform = `translateY(${88 - cardProgress * 148}%)`;
+
+      seal.style.opacity = String(1 - clamp(progress / .18,0,1));
+      seal.style.transform = `translate(-50%,-50%) scale(${1 - clamp(progress/.2,0,1)*.25})`;
+
+      intro.style.opacity = String(.78 - clamp(progress/.5,0,1)*.65);
+    }
+    animateEnvelope();
+    addEventListener("scroll", animateEnvelope, {passive:true});
+    addEventListener("resize", animateEnvelope);
+
+    // Countdown
+    const weddingDate = new Date("2026-10-10T16:30:00");
+    function updateCountdown(){
+      const now = new Date();
+      let diff = Math.max(0, weddingDate - now);
+      const days = Math.floor(diff / 86400000); diff %= 86400000;
+      const hrs = Math.floor(diff / 3600000); diff %= 3600000;
+      const min = Math.floor(diff / 60000); diff %= 60000;
+      const sec = Math.floor(diff / 1000);
+
+      document.getElementById("cdDays").textContent = String(days).padStart(2,"0");
+      document.getElementById("cdHours").textContent = String(hrs).padStart(2,"0");
+      document.getElementById("cdMin").textContent = String(min).padStart(2,"0");
+      document.getElementById("cdSec").textContent = String(sec).padStart(2,"0");
+    }
+    updateCountdown();
+    setInterval(updateCountdown,1000);
+
+    // Confirmación conectada a la base de datos
+    const form = document.getElementById("rsvpForm");
+    const attendanceSelect = document.getElementById("attendance");
+    const peopleSelect = document.getElementById("people");
+    const formStatus = document.getElementById("formStatus");
+    const peopleField = document.getElementById("peopleField");
+    const submitRsvp = document.getElementById("submitRsvp");
+
+    function syncAttendance(){
+      const noAsiste = attendanceSelect.value.toLowerCase().startsWith("no");
+      peopleField.style.display = noAsiste ? "none" : "block";
+      peopleSelect.disabled = noAsiste;
+      if (noAsiste) peopleSelect.value = "1";
+      submitRsvp.textContent = noAsiste ? "Enviar mensaje" : "Confirmar asistencia";
+    }
+
+    attendanceSelect.addEventListener("change", syncAttendance);
+    syncAttendance();
+
+    function showConfirmationSuccess(guestName, attends){
+      const confirmed = document.getElementById("confirmedGuest");
+      if (confirmed) confirmed.textContent = guestName;
+
+      document.getElementById("thankyouYes").style.display = attends ? "block" : "none";
+      document.getElementById("thankyouNo").style.display = attends ? "none" : "block";
+      form.style.display = "none";
+      formStatus.style.display = "none";
+      document.getElementById("thankyou").style.display = "block";
+    }
+
+    async function confirmationExists(guestName){
+      try {
+        const check = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(), {
+          cache: "no-store"
+        });
+        if (!check.ok) return false;
+        const result = await check.json().catch(() => ({}));
+        return Boolean(result.respondido);
+      } catch {
+        return false;
+      }
+    }
+
+    async function waitForConfirmation(guestName){
+      // Supabase puede tardar un poco en reflejar una fila recién insertada.
+      // Comprobamos varias veces antes de mostrar un error al invitado.
+      for (let attempt = 0; attempt < 6; attempt++) {
+        if (await confirmationExists(guestName)) return true;
+        await new Promise(resolve => setTimeout(resolve, 850));
+      }
+      return false;
+    }
+
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+
+      const guestName = document.getElementById("guestInput").value.trim();
+      const attendance = attendanceSelect.value;
+      const attends = attendance.toLowerCase().startsWith("sí") || attendance.toLowerCase().startsWith("si");
+      const people = attends ? Number(peopleSelect.value || 1) : 0;
+      const message = document.getElementById("message").value.trim();
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (!guestName || !attendance) return;
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Guardando...";
+      formStatus.style.display = "none";
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+
+      try {
+        const response = await fetch("/api/confirmar", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            nombre: guestName,
+            asistira: attends,
+            numero_asistentes: people,
+            mensaje: message
+          }),
+          signal: controller.signal
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudo guardar la confirmación.");
+        }
+
+        showConfirmationSuccess(guestName, attends);
+      } catch (error) {
+        // Antes de mostrar error, comprobar una sola vez si sí alcanzó a guardarse.
+        try {
+          const check = await fetch(
+            "/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(),
+            {cache: "no-store"}
+          );
+          const result = await check.json().catch(() => ({}));
+          if (check.ok && result.respondido) {
+            showConfirmationSuccess(guestName, attends);
+            return;
+          }
+        } catch {}
+
+        formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
+        formStatus.style.display = "block";
+        submitButton.disabled = false;
+        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no")
+          ? "Enviar mensaje"
+          : "Confirmar asistencia";
+        console.error(error);
+      } finally {
+        clearTimeout(timer);
+      }
+    });
+
+    function copyTransferNumber(button){
+      const number = "002180702110571551";
+      const done = () => {
+        const original = button.textContent;
+        button.textContent = "¡Número copiado!";
+        setTimeout(() => button.textContent = original, 1800);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(number).then(done);
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = number;
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        done();
+      }
+    }
+
+
+    async function checkExistingConfirmation(){
+      try {
+        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Erica Romagnoli Cruz"), {
+          cache: "no-store"
+        });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (!data.respondido || !data.confirmacion) return;
+
+        const c = data.confirmacion;
+        form.style.display = "none";
+        document.getElementById("thankyou").style.display = "none";
+
+        const box = document.getElementById("alreadyAnswered");
+        const text = document.getElementById("alreadyAnsweredText");
+
+        if (c.asistira) {
+          text.innerHTML = 'Gracias por confirmar, Erica Romagnoli Cruz.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
+        } else {
+          text.textContent = "El 10 de octubre será un día inolvidable.";
+        }
+        box.style.display = "block";
+      } catch (error) {
+        console.error("No se pudo comprobar la confirmación:", error);
+      }
+    }
+
+    checkExistingConfirmation();
+
+  </script>
+</body>
+</html>
+
+<style>
+  /* Ajuste final de portada cerrada */
+  .closed-preview{
+    opacity:0 !important;
+    pointer-events:none;
+  }
+
+  .seal{
+    top:50%;
+    width:72px;
+    height:72px;
+    font-size:18px;
+    letter-spacing:.10em;
+    background:rgba(94,101,67,.96);
+    border:1px solid rgba(255,255,255,.72);
+    box-shadow:0 8px 22px rgba(0,0,0,.18);
+  }
+
+  /* La hoja queda completamente escondida dentro del sobre antes del scroll */
+  .inner-card{
+    bottom:8%;
+  }
+
+  @media (max-width:560px){
+    .seal{
+      width:64px;
+      height:64px;
+      font-size:16px;
+    }
+  }
+</style>
