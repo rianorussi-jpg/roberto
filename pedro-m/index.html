@@ -1153,11 +1153,23 @@
       document.getElementById("thankyou").style.display = "block";
     }
 
+    async function fetchWithTimeout(url, options = {}, timeoutMs = 7000){
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(url, {...options, signal: controller.signal});
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
     async function confirmationExists(guestName){
       try {
-        const check = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(), {
-          cache: "no-store"
-        });
+        const check = await fetchWithTimeout(
+          "/api/estado-confirmacion?nombre=" + encodeURIComponent(guestName) + "&_=" + Date.now(),
+          {cache: "no-store"},
+          4000
+        );
         if (!check.ok) return false;
         const result = await check.json().catch(() => ({}));
         return Boolean(result.respondido);
@@ -1182,55 +1194,47 @@
       submitButton.textContent = "Guardando...";
       formStatus.style.display = "none";
 
-      const payload = {
-        nombre: guestName,
-        asistira: attends,
-        numero_asistentes: people,
-        mensaje: message
-      };
+      const payload = { nombre: guestName, asistira: attends, numero_asistentes: people, mensaje: message };
+      let completed = false;
 
       try {
         let response = null;
         let data = {};
 
         try {
-          response = await fetch("/api/confirmar", {
+          response = await fetchWithTimeout("/api/confirmar", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(payload)
-          });
+          }, 7000);
           data = await response.json().catch(() => ({}));
-        } catch (networkError) {
-          // Puede ocurrir que Vercel pierda la respuesta después de que Supabase ya guardó.
-          console.warn("Respuesta de confirmación no recibida; verificando base de datos.", networkError);
+        } catch (sendError) {
+          console.warn("El envío tardó demasiado; comprobando si ya se guardó.", sendError);
         }
 
         if (response && response.ok) {
+          completed = true;
           showConfirmationSuccess(guestName, attends);
           return;
         }
 
-        // Antes de mostrar un error, comprobamos si Supabase sí alcanzó a guardarla.
-        await new Promise(resolve => setTimeout(resolve, 350));
+        await new Promise(resolve => setTimeout(resolve, 500));
         if (await confirmationExists(guestName)) {
+          completed = true;
           showConfirmationSuccess(guestName, attends);
           return;
         }
 
         throw new Error(data.error || "No se pudo guardar la confirmación.");
       } catch (error) {
-        // Una segunda verificación breve cubre confirmaciones que tardaron unos ms en hacerse visibles.
-        await new Promise(resolve => setTimeout(resolve, 650));
-        if (await confirmationExists(guestName)) {
-          showConfirmationSuccess(guestName, attends);
-          return;
-        }
-
         formStatus.textContent = "No pudimos guardar tu confirmación. Por favor intenta nuevamente.";
         formStatus.style.display = "block";
-        submitButton.disabled = false;
-        submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
         console.error(error);
+      } finally {
+        if (!completed && form.style.display !== "none") {
+          submitButton.disabled = false;
+          submitButton.textContent = attendanceSelect.value.toLowerCase().startsWith("no") ? "Enviar mensaje" : "Confirmar asistencia";
+        }
       }
     });
 
