@@ -823,7 +823,7 @@
 <body>
   <!--
     INVITACIÓN PERSONALIZADA:
-    Invitado: Ximena Tercero +1
+    Invitado: Ximena Tercero
     Pase contemplado para Hugo + 1 acompañante.
   -->
 
@@ -846,7 +846,7 @@
                 <span>Cecilia</span>
               </div>
               <div class="guest-label">Tenemos el gusto de invitar a</div>
-              <div class="guest-name js-guest">Ximena Tercero +1</div>
+              <div class="guest-name js-guest">Ximena Tercero</div>
               <div class="guest-label companion-line" style="margin-top:12px">Contemplado con 1 acompañante</div>
               <div class="date-cover">10.10.2026</div>
             </div>
@@ -1000,7 +1000,7 @@
 
       <form class="rsvp-form" id="rsvpForm">
         <label for="guestInput">Invitado</label>
-        <input id="guestInput" name="guest" type="text" readonly value="Ximena Tercero +1">
+        <input id="guestInput" name="guest" type="text" readonly value="Ximena Tercero">
 
         <label for="attendance">¿Podrás acompañarnos?</label>
         <select id="attendance" name="attendance" required>
@@ -1056,7 +1056,7 @@
   </main>
 
   <script>
-    const DEFAULT_GUEST = "Ximena Tercero +1";
+    const DEFAULT_GUEST = "Ximena Tercero";
 
     // Nombre personalizado por URL:
     // index.html?invitado=Santiago
@@ -1219,7 +1219,7 @@
 
     async function checkExistingConfirmation(){
       try {
-        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Ximena Tercero +1"), {
+        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Ximena Tercero"), {
           cache: "no-store"
         });
         if (!response.ok) return;
@@ -1235,7 +1235,7 @@
         const text = document.getElementById("alreadyAnsweredText");
 
         if (c.asistira) {
-          text.innerHTML = 'Gracias por confirmar, Ximena Tercero +1.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
+          text.innerHTML = 'Gracias por confirmar, Ximena Tercero.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
         } else {
           text.textContent = "El 10 de octubre será un día inolvidable.";
         }
