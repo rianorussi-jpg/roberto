@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invitados — Roberto & Cecilia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap');
+    :root{--olive:#747b54;--paper:#f7f3eb;--ink:#2f2b28;--muted:#746f67;--line:#d8d0c4;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:#eee8dc;color:var(--ink);font-family:Montserrat,system-ui,sans-serif}
+    .wrap{max-width:1000px;margin:0 auto;padding:42px 20px 70px}
+    header{text-align:center;margin-bottom:28px}
+    h1{font-family:"Cormorant Garamond",serif;font-size:48px;margin:0;color:var(--olive)}
+    .sub{font-family:"Cormorant Garamond",serif;font-size:19px;color:var(--muted);margin-top:6px}
+    .toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:26px 0}
+    .toolbar input{flex:1;padding:13px 14px;border:1px solid var(--line);background:#fff;font:inherit}
+    .count{font-size:12px;color:var(--muted);white-space:nowrap}
+    .guest-list{display:grid;gap:14px}
+    .guest-card{background:var(--paper);border:1px solid var(--line);padding:18px;box-shadow:0 10px 26px rgba(0,0,0,.05)}
+    .guest-name{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600}
+    .guest-passes{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-top:4px}
+    .link-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-top:14px}
+    .link-row input{min-width:0;padding:11px 12px;border:1px solid var(--line);background:#fff;font-size:12px;color:#5f5b55}
+    button,.open-btn{border:0;background:var(--olive);color:#fff;padding:11px 14px;font:inherit;font-size:11px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .open-btn{background:transparent;color:var(--olive);border:1px solid var(--olive)}
+    .copy-btn.copied{background:#5f6f48}
+    .empty{display:none;text-align:center;padding:40px;color:var(--muted);font-family:"Cormorant Garamond",serif;font-size:21px}
+    @media(max-width:700px){
+      .toolbar{flex-direction:column;align-items:stretch}
+      .count{text-align:center}
+      .link-row{grid-template-columns:1fr 1fr}
+      .link-row input{grid-column:1/-1}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Invitados</h1>
+      <div class="sub">Roberto & Cecilia · 10.10.2026</div>
+    </header>
+
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Buscar invitado...">
+      <div class="count"><span id="visibleCount">38</span> invitados</div>
+    </div>
+
+    <section class="guest-list" id="guestList">
+      
+      <div class="guest-card" data-name="hugo capellini">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Hugo Capellini</div>
+            <div class="guest-passes"></div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/hugo-c/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/hugo-c/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/hugo-c/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="pedro martínez y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Pedro Martínez y familia</div>
+            <div class="guest-passes">3 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/pedro-m/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/pedro-m/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/pedro-m/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="antonio loyo y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Antonio Loyo y familia</div>
+            <div class="guest-passes">4 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/antonio-l/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/antonio-l/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/antonio-l/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="rafael mejía y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Rafael Mejía y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/rafael-m/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/rafael-m/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/rafael-m/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="rogelio alonso y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Rogelio Alonso y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/rogelio-a/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/rogelio-a/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/rogelio-a/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="juan josé núñez y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Juan José Núñez y familia</div>
+            <div class="guest-passes">4 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/juan-jose-n/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/juan-jose-n/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/juan-jose-n/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="alfonso flores y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Alfonso Flores y familia</div>
+            <div class="guest-passes">7 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/alfonso-f/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/alfonso-f/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/alfonso-f/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="fabiola hernández">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Fabiola Hernández</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/fabiola-h/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/fabiola-h/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/fabiola-h/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="ana ezeiza">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Ana Ezeiza</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/ana-e/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/ana-e/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/ana-e/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="ana karen">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Ana Karen</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/ana-k/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/ana-k/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/ana-k/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="jesús celis">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Jesús Celis</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/jesus-c/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/jesus-c/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/jesus-c/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="ninive delgado">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Ninive Delgado</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/ninive-d/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/ninive-d/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/ninive-d/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="daniela nicole arvizu">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Daniela Nicole Arvizu</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/daniela-nicole-a/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/daniela-nicole-a/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/daniela-nicole-a/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="katherin pino">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Katherin Pino</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/katherin-p/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/katherin-p/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/katherin-p/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="martha chávez">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Martha Chávez</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/martha-c/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/martha-c/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/martha-c/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="fernanda pérez">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Fernanda Pérez</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/fernanda-p/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/fernanda-p/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/fernanda-p/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="ximena tercero">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Ximena Tercero</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/ximena-t/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/ximena-t/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/ximena-t/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="ximena flores">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Ximena Flores</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/ximena-f/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/ximena-f/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/ximena-f/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="fernanda salas">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Fernanda Salas</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/fernanda-s/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/fernanda-s/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/fernanda-s/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="naomi figueroa">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Naomi Figueroa</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/naomi-f/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/naomi-f/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/naomi-f/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="maría josé zaldivar">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">María José Zaldivar</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/maria-j/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/maria-j/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/maria-j/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="jorge loyo y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Jorge Loyo y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/jorge-l/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/jorge-l/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/jorge-l/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="abigail loyo y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Abigail Loyo y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/abigail-l/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/abigail-l/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/abigail-l/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="jessica mejía y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Jessica Mejía y familia</div>
+            <div class="guest-passes">4 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/jessica-m/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/jessica-m/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/jessica-m/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="montserrat sanroman">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Montserrat Sanroman</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/montserrat-s/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/montserrat-s/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/montserrat-s/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="alejandra peña">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Alejandra Peña</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/alejandra-p/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/alejandra-p/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/alejandra-p/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="maylis chabout">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Maylis Chabout</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/maylis-c/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/maylis-c/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/maylis-c/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="marissa mejía y jocelyn trejo">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Marissa Mejía y Jocelyn Trejo</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/marissam-jocelynt/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/marissam-jocelynt/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/marissam-jocelynt/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="melissa mejía">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Melissa Mejía</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/melissa-m/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/melissa-m/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/melissa-m/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="raquel ramírez y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Raquel Ramírez y familia</div>
+            <div class="guest-passes">4 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/raquel-r/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/raquel-r/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/raquel-r/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="cristian palavaccino y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Cristian Palavaccino y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/cristian-p/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/cristian-p/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/cristian-p/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="maría teresa morales">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">María Teresa Morales</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/maria-t/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/maria-t/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/maria-t/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="reina vásquez y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Reina Vásquez y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/reina-v/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/reina-v/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/reina-v/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="cinthya arzani">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Cinthya Arzani</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/cinthya-a/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/cinthya-a/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/cinthya-a/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="miguel arzani">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Miguel Arzani</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/miguel-a/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/miguel-a/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/miguel-a/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="fabiola alonso">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Fabiola Alonso</div>
+            <div class="guest-passes">1 pase</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/fabiola-a/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/fabiola-a/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/fabiola-a/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="denise neri">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Denise Neri</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/denise-n/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/denise-n/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/denise-n/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+      <div class="guest-card" data-name="guadalupe martínez y familia">
+        <div class="guest-main">
+          <div>
+            <div class="guest-name">Guadalupe Martínez y familia</div>
+            <div class="guest-passes">2 pases</div>
+          </div>
+        </div>
+        <div class="link-row">
+          <input type="text" value="https://robertoycecilia.enla.mx/guadalupe-m/" readonly>
+          <button type="button" class="copy-btn" data-link="https://robertoycecilia.enla.mx/guadalupe-m/">Copiar link</button>
+          <a class="open-btn" href="https://robertoycecilia.enla.mx/guadalupe-m/" target="_blank" rel="noopener">Abrir</a>
+        </div>
+      </div>
+    
+    </section>
+
+    <div class="empty" id="empty">No se encontraron invitados.</div>
+  </main>
+
+  <script>
+    const cards = [...document.querySelectorAll(".guest-card")];
+    const search = document.getElementById("search");
+    const visibleCount = document.getElementById("visibleCount");
+    const empty = document.getElementById("empty");
+
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const show = card.dataset.name.includes(q);
+        card.style.display = show ? "block" : "none";
+        if (show) visible++;
+      });
+      visibleCount.textContent = visible;
+      empty.style.display = visible ? "none" : "block";
+    });
+
+    document.querySelectorAll(".copy-btn").forEach(button => {
+      button.addEventListener("click", async () => {
+        const link = button.dataset.link;
+        try {
+          await navigator.clipboard.writeText(link);
+        } catch {
+          const temp = document.createElement("textarea");
+          temp.value = link;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand("copy");
+          temp.remove();
+        }
+
+        const old = button.textContent;
+        button.textContent = "¡Copiado!";
+        button.classList.add("copied");
+        setTimeout(() => {
+          button.textContent = old;
+          button.classList.remove("copied");
+        }, 1400);
+      });
+    });
+  </script>
+</body>
+</html>
