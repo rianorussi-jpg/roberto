@@ -26,8 +26,8 @@ export default async function handler(req, res) {
 
   try {
     // Invitaciones personalizadas: una sola respuesta por invitado.
-    // Hugo no puede volver a confirmar ni cambiar su respuesta desde el formulario.
-    if (cleanName.toLowerCase() === "hugo capellini") {
+    const personalizedGuests = ["hugo capellini", "pedro martínez y familia", "antonio loyo y familia", "rafael mejía y familia", "rogelio alonso y familia", "juan josé núñez y familia", "alfonso flores y familia", "fabiola hernández +1", "ana ezeiza +1", "ana karen +1", "jesús celis", "ninive delgado", "daniela nicole arvizu", "katherin pino", "martha chávez +1", "fernanda pérez +1", "ximena tercero +1", "ximena flores", "fernanda salas", "naomi figueroa", "maría josé zaldivar", "jorge loyo y familia", "abigail loyo y familia", "jessica mejía y familia", "montserrat sanroman", "alejandra peña", "maylis chabout", "marissa mejía y jocelyn trejo", "melissa mejía +1", "raquel ramírez y familia", "cristian palavaccino y familia", "maría teresa morales", "reina vásquez y familia", "cinthya arzani", "miguel arzani", "fabiola alonso", "denise neri +1", "guadalupe martínez y familia"];
+    if (personalizedGuests.includes(cleanName.toLowerCase())) {
       const checkResponse = await fetch(
         `${supabaseUrl}/rest/v1/confirmaciones?select=id&nombre=eq.${encodeURIComponent(cleanName)}&limit=1`,
         { headers: { "apikey": supabaseKey } }
