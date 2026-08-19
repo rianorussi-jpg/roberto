@@ -34,6 +34,16 @@
     td{font-size:13px}
     .yes{color:#4f6b43;font-weight:600}.no{color:#95544c;font-weight:600}
     .message{max-width:360px;white-space:pre-wrap}
+    .list-title{
+      font-family:"Cormorant Garamond",serif;
+      font-size:30px;
+      font-weight:500;
+      color:var(--olive);
+      margin:30px 0 12px;
+      padding-bottom:8px;
+      border-bottom:1px solid var(--line);
+    }
+    .no-title{margin-top:46px}
     @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.panel{padding:15px}.tools{align-items:stretch;flex-direction:column}.tools input{max-width:none}}
   </style>
 </head>
@@ -64,18 +74,32 @@
         <button id="refreshBtn">Actualizar lista</button>
       </div>
 
+      <h2 class="list-title">Sí asistirán</h2>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>Nombre</th>
-              <th>Asistencia</th>
               <th>Personas</th>
               <th>Mensaje</th>
               <th>Confirmó</th>
             </tr>
           </thead>
-          <tbody id="rows"></tbody>
+          <tbody id="yesRows"></tbody>
+        </table>
+      </div>
+
+      <h2 class="list-title no-title">No asistirán</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Mensaje</th>
+              <th>Respondió</th>
+            </tr>
+          </thead>
+          <tbody id="noRows"></tbody>
         </table>
       </div>
     </section>
@@ -99,6 +123,8 @@
     function render(){
       const q = document.getElementById("search").value.trim().toLowerCase();
       const filtered = confirmations.filter(x => x.nombre.toLowerCase().includes(q));
+      const yes = filtered.filter(x => x.asistira);
+      const no = filtered.filter(x => !x.asistira);
 
       document.getElementById("responses").textContent = confirmations.length;
       document.getElementById("yesCount").textContent = confirmations.filter(x => x.asistira).length;
@@ -106,15 +132,22 @@
       document.getElementById("peopleCount").textContent =
         confirmations.reduce((sum,x) => sum + (x.asistira ? Number(x.numero_asistentes || 0) : 0), 0);
 
-      document.getElementById("rows").innerHTML = filtered.map(x => `
+      document.getElementById("yesRows").innerHTML = yes.length ? yes.map(x => `
         <tr>
           <td><strong>${esc(x.nombre)}</strong></td>
-          <td class="${x.asistira ? "yes" : "no"}">${x.asistira ? "Sí" : "No"}</td>
-          <td>${x.asistira ? esc(x.numero_asistentes) : "0"}</td>
+          <td>${esc(x.numero_asistentes)}</td>
           <td class="message">${esc(x.mensaje || "—")}</td>
           <td>${new Date(x.created_at).toLocaleString("es-MX", {dateStyle:"medium",timeStyle:"short"})}</td>
         </tr>
-      `).join("");
+      `).join("") : `<tr><td colspan="4">Todavía no hay confirmaciones en esta lista.</td></tr>`;
+
+      document.getElementById("noRows").innerHTML = no.length ? no.map(x => `
+        <tr>
+          <td><strong>${esc(x.nombre)}</strong></td>
+          <td class="message">${esc(x.mensaje || "—")}</td>
+          <td>${new Date(x.created_at).toLocaleString("es-MX", {dateStyle:"medium",timeStyle:"short"})}</td>
+        </tr>
+      `).join("") : `<tr><td colspan="3">Todavía no hay respuestas en esta lista.</td></tr>`;
     }
 
     async function load(){

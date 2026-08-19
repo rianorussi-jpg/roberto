@@ -1,0 +1,42 @@
+CONFIGURACIÓN
+
+1. SUPABASE
+   - Abre tu proyecto.
+   - Ve a SQL Editor.
+   - Ejecuta el archivo: supabase/crear_tabla.sql
+
+2. VARIABLES EN VERCEL
+   Project > Settings > Environment Variables
+
+   SUPABASE_URL
+   Valor: la Project URL de Supabase
+   Ejemplo: https://xxxxxxxx.supabase.co
+
+   SUPABASE_SECRET_KEY
+   Valor: la Secret key de Supabase (empieza normalmente con sb_secret_...)
+   Supabase > Settings > API Keys > Secret keys
+   NO pongas esta key dentro de ningún HTML.
+
+   CONFIRMADOS_PASSWORD
+   Valor: una contraseña elegida por los novios para entrar a /confirmados
+
+   Marca las variables al menos para Production.
+   Si pruebas con deployments Preview, márcalas también para Preview.
+
+3. REDEPLOY
+   Después de agregar/cambiar variables en Vercel, haz un nuevo deployment.
+
+RUTAS
+/
+  index.html              invitación general
+/hugo/
+  index.html              invitación de Hugo
+/confirmados/
+  index.html              panel privado
+/api/
+  confirmar.js            guarda confirmaciones
+  confirmados.js          lee confirmaciones (protegido por contraseña)
+
+IMPORTANTE
+La imagen compartida sigue esperándose en:
+/images/pareja.png
