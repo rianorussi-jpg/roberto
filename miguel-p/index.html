@@ -823,7 +823,7 @@
 <body>
   <!--
     INVITACIÓN PERSONALIZADA:
-    Invitado: Miguel Pascual
+    Invitado: Regina Cortés
     Pase contemplado para Hugo + 1 acompañante.
   -->
 
@@ -846,7 +846,7 @@
                 <span>Roberto</span>
               </div>
               <div class="guest-label">Tenemos el gusto de invitar a</div>
-              <div class="guest-name js-guest">Miguel Pascual</div>
+              <div class="guest-name js-guest">Regina Cortés</div>
               <div class="guest-label companion-line" style="margin-top:12px">Pase personal</div>
               <div class="date-cover">10.10.2026</div>
             </div>
@@ -1000,7 +1000,7 @@
 
       <form class="rsvp-form" id="rsvpForm">
         <label for="guestInput">Invitado</label>
-        <input id="guestInput" name="guest" type="text" readonly value="Miguel Pascual">
+        <input id="guestInput" name="guest" type="text" readonly value="Regina Cortés">
 
         <label for="attendance">¿Podrás acompañarnos?</label>
         <select id="attendance" name="attendance" required>
@@ -1058,7 +1058,7 @@
   </main>
 
   <script>
-    const DEFAULT_GUEST = "Miguel Pascual";
+    const DEFAULT_GUEST = "Regina Cortés";
 
     // Nombre personalizado por URL:
     // index.html?invitado=Santiago
@@ -1268,7 +1268,7 @@
 
     async function checkExistingConfirmation(){
       try {
-        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Miguel Pascual"), {
+        const response = await fetch("/api/estado-confirmacion?nombre=" + encodeURIComponent("Regina Cortés"), {
           cache: "no-store"
         });
         if (!response.ok) return;
@@ -1284,7 +1284,7 @@
         const text = document.getElementById("alreadyAnsweredText");
 
         if (c.asistira) {
-          text.innerHTML = 'Gracias por confirmar, Miguel Pascual.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
+          text.innerHTML = 'Gracias por confirmar, Regina Cortés.<br>El 10 de octubre será un día inolvidable y nos hace mucha ilusión compartirlo contigo.';
         } else {
           text.textContent = "El 10 de octubre será un día inolvidable.";
         }
